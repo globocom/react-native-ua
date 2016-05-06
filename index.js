@@ -9,7 +9,8 @@ const ReactNativeUrbanAirshipIOS = NativeModules.ReactNativeUrbanAirshipIOS;
 
 let subscriptions = {};
 
-export default class ReactNativeUrbanAirship {
+
+class ReactNativeUrbanAirship {
 
     static enable_notification () {
         ReactNativeUrbanAirshipIOS.enableNotification();
@@ -39,3 +40,5 @@ export default class ReactNativeUrbanAirship {
         delete subscriptions[event].remove();
     }
 }
+
+export default ReactNativeUrbanAirship;

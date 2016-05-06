@@ -1,6 +1,16 @@
+#import "RCTBridge.h"
+#import "RCTEventDispatcher.h"
 #import "ReactNativeUrbanAirshipIOS.h"
 
+
+@interface ReactNativeUrbanAirshipIOS ()
+@property(nonatomic, strong) PushHandler *pushHandler;
+@end
+
+
 @implementation ReactNativeUrbanAirshipIOS
+
+@synthesize bridge = _bridge;
 
 RCT_EXPORT_MODULE()
 
@@ -27,18 +37,69 @@ RCT_EXPORT_METHOD(setTags:(NSArray *)tags) {
   [[UAirship push] updateRegistration];
 }
 
-- (dispatch_queue_t)methodQueue
-{
+static ReactNativeUrbanAirshipIOS *instance = nil;
+
++ (ReactNativeUrbanAirshipIOS *)getInstance {
+  return instance;
+}
+
+- (dispatch_queue_t)methodQueue {
+  self.pushHandler = [PushHandler new];
+
+  [UAirship push].pushNotificationDelegate = self.pushHandler;
+
+  instance = self;
+
   return dispatch_get_main_queue();
 }
 
 + (void)setupUrbanAirship {
-  [UAirship setLogLevel:UALogLevelTrace];
-  
-  // Load config from AirshipConfig.plist
   UAConfig *config = [UAConfig defaultConfig];
-  
   [UAirship takeOff:config];
+}
+
+- (void)dispatchEvent:(NSString *)event body:(NSDictionary *)notification {
+  [self.bridge.eventDispatcher sendAppEventWithName:event body:notification];
+}
+
+@end
+
+
+@implementation PushHandler
+
+- (void)receivedForegroundNotification:(NSDictionary *)notification fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+  [[ReactNativeUrbanAirshipIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"type": @"receivedForegroundNotification",
+                                                                                         @"data": notification}];
+
+  completionHandler(UIBackgroundFetchResultNoData);
+}
+
+- (void)launchedFromNotification:(NSDictionary *)notification fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+  [[ReactNativeUrbanAirshipIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"type": @"launchedFromNotification",
+                                                                                         @"data": notification}];
+
+  completionHandler(UIBackgroundFetchResultNoData);
+}
+
+- (void)launchedFromNotification:(NSDictionary *)notification actionIdentifier:(NSString *)identifier completionHandler:(void (^)())completionHandler {
+  [[ReactNativeUrbanAirshipIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"type": @"launchedFromNotificationActionButton",
+                                                                                         @"data": notification}];
+
+  completionHandler();
+}
+
+- (void)receivedBackgroundNotification:(NSDictionary *)notification actionIdentifier:(NSString *)identifier completionHandler:(void (^)())completionHandler {
+  [[ReactNativeUrbanAirshipIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"type": @"receivedBackgroundNotificationActionButton",
+                                                                                         @"data": notification}];
+
+  completionHandler();
+}
+
+- (void)receivedBackgroundNotification:(NSDictionary *)notification fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+  [[ReactNativeUrbanAirshipIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"type": @"receivedBackgroundNotification",
+                                                                                         @"data": notification}];
+
+  completionHandler(UIBackgroundFetchResultNoData);
 }
 
 @end
