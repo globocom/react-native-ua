@@ -7,6 +7,8 @@ import {
 
 const ReactNativeUrbanAirshipIOS = NativeModules.ReactNativeUrbanAirshipIOS;
 
+let subscriptions = {};
+
 export default class ReactNativeUrbanAirship {
 
     static enable_notification () {
@@ -29,4 +31,11 @@ export default class ReactNativeUrbanAirship {
         ReactNativeUrbanAirshipIOS.setTags(tags);
     }
 
+    static subscribe_to (event, callback) {
+        subscriptions[event] = NativeAppEventEmitter.addListener(event, callback);
+    }
+
+    static unsubscribe_to (event) {
+        delete subscriptions[event].remove();
+    }
 }
