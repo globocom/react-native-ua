@@ -8,16 +8,22 @@ import com.facebook.react.bridge.ReactMethod;
 
 
 public class ReactNativeUAModule extends ReactContextBaseJavaModule {
+
     private Activity mainActivity;
 
     public ReactNativeUAModule(ReactApplicationContext reactContext, Activity activity) {
         super(reactContext);
+
         mainActivity = activity;
     }
 
     @Override
     public String getName() {
         return "ReactNativeUAAndroid";
+    }
+
+    @ReactMethod
+    public void takeOff(ReadableMap config) {
     }
 
     @ReactMethod

@@ -14,6 +14,12 @@ import java.util.List;
 
 public class ReactNativeUAPackage implements ReactPackage {
 
+    private Activity mainActivity;
+
+    public RNUAirshipPackage(Activity activity) {
+        mainActivity = activity;
+    }
+
     @Override
     public List<Class<? extends JavaScriptModule>> createJSModules() {
         return Arrays.asList();
@@ -28,7 +34,7 @@ public class ReactNativeUAPackage implements ReactPackage {
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
 
-        modules.add(new ReactNativeUAModule(reactContext));
+        modules.add(new ReactNativeUAModule(reactContext, mainActivity));
 
         return modules;
     }
