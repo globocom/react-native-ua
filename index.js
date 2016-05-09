@@ -4,32 +4,43 @@ import {
   Platform
 } from 'react-native';
 
+const ReactNativeUAIOS = NativeModules.ReactNativeUAIOS;
+const ReactNativeUAAndroid = NativeModules.ReactNativeUAAndroid;
 
-const ReactNativeUrbanAirshipIOS = NativeModules.ReactNativeUrbanAirshipIOS;
-
+let bridge = null;
 let subscriptions = {};
 
+switch (Platform.OS) {
+    case 'ios':
+        bridge = ReactNativeUAIOS;
+        break;
 
-class ReactNativeUrbanAirship {
+    case 'android':
+        bridge = ReactNativeUAAndroid;
+        break;
+}
+
+
+class ReactNativeUA {
 
     static enable_notification () {
-        ReactNativeUrbanAirshipIOS.enableNotification();
+        bridge.enableNotification();
     }
 
     static disable_notification () {
-        ReactNativeUrbanAirshipIOS.disableNotification();
+        bridge.disableNotification();
     }
 
     static add_tag (tag) {
-        ReactNativeUrbanAirshipIOS.addTag(tag);
+        bridge.addTag(tag);
     }
 
     static remove_tag (tag) {
-        ReactNativeUrbanAirshipIOS.removeTag(tag);
+        bridge.removeTag(tag);
     }
 
     static set_tags (tags) {
-        ReactNativeUrbanAirshipIOS.setTags(tags);
+        bridge.setTags(tags);
     }
 
     static subscribe_to (event, callback) {
@@ -41,4 +52,4 @@ class ReactNativeUrbanAirship {
     }
 }
 
-export default ReactNativeUrbanAirship;
+export default ReactNativeUA

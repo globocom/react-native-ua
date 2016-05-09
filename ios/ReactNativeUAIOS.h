@@ -1,7 +1,7 @@
 #import "RCTBridgeModule.h"
 #import <AirshipKit/AirshipKit.h>
 
-@interface ReactNativeUrbanAirshipIOS : NSObject <RCTBridgeModule>
+@interface ReactNativeUAIOS : NSObject <RCTBridgeModule>
 + (void)setupUrbanAirship;
 @end
 
