@@ -1,14 +1,14 @@
 #import "RCTBridge.h"
 #import "RCTEventDispatcher.h"
-#import "ReactNativeUrbanAirshipIOS.h"
+#import "ReactNativeUAIOS.h"
 
 
-@interface ReactNativeUrbanAirshipIOS ()
+@interface ReactNativeUAIOS ()
 @property(nonatomic, strong) PushHandler *pushHandler;
 @end
 
 
-@implementation ReactNativeUrbanAirshipIOS
+@implementation ReactNativeUAIOS
 
 @synthesize bridge = _bridge;
 
@@ -37,9 +37,9 @@ RCT_EXPORT_METHOD(setTags:(NSArray *)tags) {
   [[UAirship push] updateRegistration];
 }
 
-static ReactNativeUrbanAirshipIOS *instance = nil;
+static ReactNativeUAIOS *instance = nil;
 
-+ (ReactNativeUrbanAirshipIOS *)getInstance {
++ (ReactNativeUAIOS *)getInstance {
   return instance;
 }
 
@@ -68,35 +68,35 @@ static ReactNativeUrbanAirshipIOS *instance = nil;
 @implementation PushHandler
 
 - (void)receivedForegroundNotification:(NSDictionary *)notification fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-  [[ReactNativeUrbanAirshipIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"type": @"receivedForegroundNotification",
+  [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"type": @"receivedForegroundNotification",
                                                                                          @"data": notification}];
 
   completionHandler(UIBackgroundFetchResultNoData);
 }
 
 - (void)launchedFromNotification:(NSDictionary *)notification fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-  [[ReactNativeUrbanAirshipIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"type": @"launchedFromNotification",
+  [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"type": @"launchedFromNotification",
                                                                                          @"data": notification}];
 
   completionHandler(UIBackgroundFetchResultNoData);
 }
 
 - (void)launchedFromNotification:(NSDictionary *)notification actionIdentifier:(NSString *)identifier completionHandler:(void (^)())completionHandler {
-  [[ReactNativeUrbanAirshipIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"type": @"launchedFromNotificationActionButton",
+  [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"type": @"launchedFromNotificationActionButton",
                                                                                          @"data": notification}];
 
   completionHandler();
 }
 
 - (void)receivedBackgroundNotification:(NSDictionary *)notification actionIdentifier:(NSString *)identifier completionHandler:(void (^)())completionHandler {
-  [[ReactNativeUrbanAirshipIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"type": @"receivedBackgroundNotificationActionButton",
+  [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"type": @"receivedBackgroundNotificationActionButton",
                                                                                          @"data": notification}];
 
   completionHandler();
 }
 
 - (void)receivedBackgroundNotification:(NSDictionary *)notification fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-  [[ReactNativeUrbanAirshipIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"type": @"receivedBackgroundNotification",
+  [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"type": @"receivedBackgroundNotification",
                                                                                          @"data": notification}];
 
   completionHandler(UIBackgroundFetchResultNoData);
