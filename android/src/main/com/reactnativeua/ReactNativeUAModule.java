@@ -24,6 +24,7 @@ public class ReactNativeUAModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void takeOff(ReadableMap config) {
+        UAirShip.takeOff(this);
     }
 
     @ReactMethod
