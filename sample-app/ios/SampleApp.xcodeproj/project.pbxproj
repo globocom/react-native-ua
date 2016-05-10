@@ -22,9 +22,9 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		510A09CE1CE22FC100EE5530 /* ReactNativeUAIOS.m in Sources */ = {isa = PBXBuildFile; fileRef = 510A09CC1CE22FC100EE5530 /* ReactNativeUAIOS.m */; };
-		510A0B231CE260CA00EE5530 /*  AirshipConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 510A0B221CE260CA00EE5530 /*  AirshipConfig.plist */; };
 		510A0B871CE263E800EE5530 /* AirshipResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 510A0B261CE263E800EE5530 /* AirshipResources.bundle */; };
 		510A0B881CE263E800EE5530 /* libUAirship-7.1.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 510A0B7D1CE263E800EE5530 /* libUAirship-7.1.0.a */; };
+		510A0B951CE2836700EE5530 /* AirshipConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 510A0B941CE2836700EE5530 /* AirshipConfig.plist */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 /* End PBXBuildFile section */
 
@@ -142,7 +142,6 @@
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		510A09CB1CE22FC100EE5530 /* ReactNativeUAIOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReactNativeUAIOS.h; path = ../../ios/ReactNativeUAIOS.h; sourceTree = "<group>"; };
 		510A09CC1CE22FC100EE5530 /* ReactNativeUAIOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReactNativeUAIOS.m; path = ../../ios/ReactNativeUAIOS.m; sourceTree = "<group>"; };
-		510A0B221CE260CA00EE5530 /*  AirshipConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = " AirshipConfig.plist"; sourceTree = "<group>"; };
 		510A0B251CE263E800EE5530 /* AirshipLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AirshipLib.h; sourceTree = "<group>"; };
 		510A0B261CE263E800EE5530 /* AirshipResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AirshipResources.bundle; sourceTree = "<group>"; };
 		510A0B291CE263E800EE5530 /* UANativeBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UANativeBridge.h; sourceTree = "<group>"; };
@@ -235,6 +234,7 @@
 		510A0B841CE263E800EE5530 /* UAUserNotificationAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UAUserNotificationAction.h; sourceTree = "<group>"; };
 		510A0B851CE263E800EE5530 /* UAUserNotificationCategories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UAUserNotificationCategories.h; sourceTree = "<group>"; };
 		510A0B861CE263E800EE5530 /* UAUserNotificationCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UAUserNotificationCategory.h; sourceTree = "<group>"; };
+		510A0B941CE2836700EE5530 /* AirshipConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AirshipConfig.plist; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -547,7 +547,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				510A0B221CE260CA00EE5530 /*  AirshipConfig.plist */,
+				510A0B941CE2836700EE5530 /* AirshipConfig.plist */,
 				510A0B241CE263E800EE5530 /* Airship */,
 				13B07FAE1A68108700A75B9A /* SampleApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -779,10 +779,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				510A0B231CE260CA00EE5530 /*  AirshipConfig.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				510A0B871CE263E800EE5530 /* AirshipResources.bundle in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				510A0B951CE2836700EE5530 /* AirshipConfig.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

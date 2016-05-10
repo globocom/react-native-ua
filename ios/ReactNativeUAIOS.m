@@ -16,17 +16,18 @@ RCT_EXPORT_MODULE()
 
 RCT_EXPORT_METHOD(enableNotification) {
   NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-
+  
+  [UAirship push].userPushNotificationsEnabled = YES;
+  
   if ([defaults objectForKey:@"first_time_notification_enable"]) {
 
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
 
   } else {
-
-    [UAirship push].userPushNotificationsEnabled = YES;
+    
     [defaults setBool:YES forKey:@"first_time_notification_enable"];
     [defaults synchronize];
-
+    
   }
 }
 
@@ -75,6 +76,7 @@ static ReactNativeUAIOS *instance = nil;
 
 + (void)setupUrbanAirship {
   UAConfig *config = [UAConfig defaultConfig];
+  
   [UAirship takeOff:config];
 }
 
