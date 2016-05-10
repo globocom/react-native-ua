@@ -5,39 +5,36 @@ React Native module for [Urban Airship](http://docs.urbanairship.com) platforms:
 ### Installation (**W.I.P**)
 `npm install react-native-ua`
 
-#### iOS Installation
-- Make sure if you already have your urban app credentials and enable apns; *[Help](http://docs.urbanairship.com/reference/push-providers/apns.html#ios-apns-setup)*
-- Open your `react_native_app_folder/ios/YourApp.xcodeproj` using xcode, them copy all content from `node_modules/react-native-ua/ios/` and past into the root level of your app project;
-- Using Xcode update `AirshipConfig.plist` with your app credentials from UrbanAirship;
-- On Xcode add the AirshipKit.framework file to the Embedded Binaries section in the General tab for your target. *[Help](http://docs.urbanairship.com/platform/ios.html#including-the-urban-airship-sdk)*
+#### iOS setup
+- Habilitar suporte a notificação no projeto IOS do xcode
+- - Dentro de capabilities, selecione *Push Notification* e mude para *Enable*;
+- - Dentro de capabilities habilitar dentro de *Background Modes*, *Remote notifications*.
+- Copiar todos os arquivos existentes na pasta [IOS](https://github.com/globocom/react-native-ua/tree/master/ios) para a raiz do projeto.
+- Atualizar os dados relativos ao urbanairship no arquivo de configuração `AirshipConfig.plist` na raiz do projeto baseado neste: [AirshipConfig.plist](https://github.com/globocom/react-native-ua/blob/master/ios/AirshipConfig.plist)
+- Mover arquivos [ReactNativeUAIOS.h](https://github.com/globocom/react-native-ua/blob/master/ios/ReactNativeUAIOS.h), [ReactNativeUAIOS.m](https://github.com/globocom/react-native-ua/blob/master/ios/ReactNativeUAIOS.m) para a raiz da aplicação (projeto/app) ou outro local para ser importado.
+- Dentro de *General* do projeto, em *Embeded Binaries* adicionar o arquivo *AirshipKit.framework*
+- Dentro do *AppDelegate.m*, importar o módulo [ReactNativeUAIOS.h](https://github.com/globocom/react-native-ua/blob/master/ios/ReactNativeUAIOS.h) e realizar a sua chamada `[ReactNativeUAIOS setupUrbanAirship];`: 
 
-### Usage (**W.I.P**)
+```objective-c
+#import "ReactNativeUAIOS.h"
 
-Into your `AppDelegate.m` call `ReactNativeUrbanAirshipIOS setupUrbanAirship]` in `didFinishLaunchingWithOptions` method:
-```object-c
 // ...
 
-#import "ReactNativeUrbanAirshipIOS.m"
-
-// ...
+@implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  // ...
-  
-  [ReactNativeUrbanAirshipIOS setupUrbanAirship]
-  
+  // setup react native urban airship
+  [ReactNativeUAIOS setupUrbanAirship];
+
   // ...
 }
 
+// ...
+
 @end
-
 ```
 
-To enable push notification call the `enable` method from `ReactNativeUrbanAirship` module.
 
-```javascript
-import ReactNativeUrbanAirship from 'react-native-ua';
+### Usage (**W.I.P**)
 
-ReactNativeUrbanAirship.enable()
-```
