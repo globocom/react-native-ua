@@ -10,9 +10,9 @@ React Native module for [Urban Airship](http://docs.urbanairship.com) platforms:
 - Habilitar suporte a notificação no projeto:
 - - Dentro de capabilities, selecione **Push Notification** e mude para **Enable**;
 - - Dentro de capabilities habilitar dentro de **Background Modes**, **Remote notifications**.
-- Adicionar através do Xcode todos os arquivos existentes na pasta [IOS](https://github.com/globocom/react-native-ua/tree/master/ios) na raiz do projeto.
+- Adicionar através do Xcode todos os arquivos existentes na pasta [node_modules/react-native-ua/ios](https://github.com/globocom/react-native-ua/tree/master/ios) na raiz do projeto.
 - Atualizar os dados relativos a sua app do Urbanairship no arquivo de configuração [AirshipConfig.plist](https://github.com/globocom/react-native-ua/blob/master/ios/AirshipConfig.plist) existente na raiz do projeto;
-- Mover arquivos [ReactNativeUAIOS.h](https://github.com/globocom/react-native-ua/blob/master/ios/ReactNativeUAIOS.h) e  [ReactNativeUAIOS.m](https://github.com/globocom/react-native-ua/blob/master/ios/ReactNativeUAIOS.m) para a raiz da sua aplicação (projeto/app) ou outro local para ser importado.
+- Mover arquivos [ReactNativeUAIOS.h](https://github.com/globocom/react-native-ua/blob/master/ios/ReactNativeUAIOS.h) e [ReactNativeUAIOS.m](https://github.com/globocom/react-native-ua/blob/master/ios/ReactNativeUAIOS.m) para a raiz da sua aplicação dentro do projeto Xcode.
 - Configurar SDK do UrbanAirship:
 - - Em *Build Settings* inclua o diretório `$(SRCROOT)/Airship/**` de forma recursiva no item **Header Search Paths**;
 - - Em *Build Settings* inclua as flags `-ObjC`, `-lz` e `-lsqlite3` em **Other Linker Flags**;

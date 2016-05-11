@@ -3,31 +3,56 @@
 #import "ReactNativeUAIOS.h"
 
 
-@interface ReactNativeUAIOS ()
-@property(nonatomic, strong) PushHandler *pushHandler;
-@end
-
-
 @implementation ReactNativeUAIOS
 
 @synthesize bridge = _bridge;
+
+static ReactNativeUAIOS *instance = nil;
+static PushHandler *pushHandler = nil;
+
++ (ReactNativeUAIOS *)getInstance {
+  return instance;
+}
+
++ (PushHandler *)getPushHandler {
+  return pushHandler;
+}
+
++ (void)setupUrbanAirship {
+  UAConfig *config = [UAConfig defaultConfig];
+
+  [UAirship takeOff:config];
+
+  pushHandler = [PushHandler new];
+  [UAirship push].pushNotificationDelegate = pushHandler;
+}
+
+- (dispatch_queue_t)methodQueue {
+  instance = self;
+
+  return dispatch_get_main_queue();
+}
+
+- (void)dispatchEvent:(NSString *)event body:(NSDictionary *)notification {
+  [self.bridge.eventDispatcher sendAppEventWithName:event body:notification];
+}
 
 RCT_EXPORT_MODULE()
 
 RCT_EXPORT_METHOD(enableNotification) {
   NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-  
+
   [UAirship push].userPushNotificationsEnabled = YES;
-  
+
   if ([defaults objectForKey:@"first_time_notification_enable"]) {
 
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
 
   } else {
-    
+
     [defaults setBool:YES forKey:@"first_time_notification_enable"];
     [defaults synchronize];
-    
+
   }
 }
 
@@ -56,32 +81,6 @@ RCT_EXPORT_METHOD(removeTag:(NSString *)tag) {
 RCT_EXPORT_METHOD(setTags:(NSArray *)tags) {
   [UAirship push].tags = tags;
   [[UAirship push] updateRegistration];
-}
-
-static ReactNativeUAIOS *instance = nil;
-
-+ (ReactNativeUAIOS *)getInstance {
-  return instance;
-}
-
-- (dispatch_queue_t)methodQueue {
-  self.pushHandler = [PushHandler new];
-
-  [UAirship push].pushNotificationDelegate = self.pushHandler;
-
-  instance = self;
-
-  return dispatch_get_main_queue();
-}
-
-+ (void)setupUrbanAirship {
-  UAConfig *config = [UAConfig defaultConfig];
-  
-  [UAirship takeOff:config];
-}
-
-- (void)dispatchEvent:(NSString *)event body:(NSDictionary *)notification {
-  [self.bridge.eventDispatcher sendAppEventWithName:event body:notification];
 }
 
 @end
