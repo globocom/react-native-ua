@@ -7,13 +7,12 @@ import React, {
   NativeModules
 } from 'react-native';
 
-// import ReactNativeUA from 'react-native-ua';
+import ReactNativeUA from 'react-native-ua';
 
 class UrbanAirshipNotification extends Component {
 
   render() {
-
-    // ReactNativeUA.enable_notification()
+    ReactNativeUA.enable_notification()
     // ReactNativeUA.disable_notification()
     // ReactNativeUA.set_tags(["test-a", "test-b", "test-c"])
     // ReactNativeUA.add_tag("test-react-native-2")

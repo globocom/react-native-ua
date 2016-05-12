@@ -7,7 +7,11 @@ import com.facebook.react.shell.MainReactPackage;
 import java.util.Arrays;
 import java.util.List;
 
+import com.globo.reactnativeua.ReactNativeUAPackage;
+
+
 public class MainActivity extends ReactActivity {
+    private ReactNativeUAPackage mReactNativeUAPackage;
 
     /**
      * Returns the name of the main component registered from JavaScript.
@@ -33,8 +37,10 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected List<ReactPackage> getPackages() {
+        mReactNativeUAPackage = new ReactNativeUAPackage(this);
         return Arrays.<ReactPackage>asList(
-            new MainReactPackage()
+            new MainReactPackage(),
+            mReactNativeUAPackage
         );
     }
 }
