@@ -1,5 +1,31 @@
 {
   "name": "react-native-ua",
   "version": "0.0.1",
-  "main": "index.js"
+  "description": "React Native module for Urban Airship platforms: iOS and Android",
+  "main": "index.js",
+  "keywords": [
+    "react-component",
+    "react-native",
+    "ios",
+    "android",
+    "notifications",
+    "push",
+    "apns",
+    "gcm",
+    "urban",
+    "airship"
+  ],
+  "homepage": "https://github.com/globocom/react-native-ua#readme",
+  "bugs": {
+    "url": "https://github.com/globocom/react-native-ua/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:globocom/react-native-ua.git"
+  },
+  "peerDependencies": {
+    "react-native": ">=0.25.1"
+  },
+  "author": "Globo.com <http://zo0r.me>",
+  "license": "MIT"
 }
