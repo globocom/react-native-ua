@@ -1,6 +1,8 @@
-package com.reactnativeua;
+package com.globo.reactnativeua;
 
-import com.reactnativeua.ReactNativeUAModule;
+import android.app.Activity;
+
+import com.globo.reactnativeua.ReactNativeUA;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.uimanager.ViewManager;
@@ -16,7 +18,7 @@ public class ReactNativeUAPackage implements ReactPackage {
 
     private Activity mainActivity;
 
-    public RNUAirshipPackage(Activity activity) {
+    public ReactNativeUAPackage(Activity activity) {
         mainActivity = activity;
     }
 
@@ -33,10 +35,7 @@ public class ReactNativeUAPackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
-
-        mRNUAModule = new ReactNativeUAModule(reactContext, mainActivity)
-        modules.add(mRNUAModule);
-
+        modules.add(new ReactNativeUA(reactContext, mainActivity));
         return modules;
     }
 }
