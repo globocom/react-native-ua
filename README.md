@@ -42,3 +42,25 @@ React Native module for [Urban Airship](http://docs.urbanairship.com) platforms:
 
 @end
 ```
+
+### Usage
+
+``` javascript
+import ReactNativeUA from 'react-native-ua'; // import module
+
+ReactNativeUA.enable_notification(); // prompt user to enable notification 
+ReactNativeUA.disable_notification(); // prompt user to disable notification
+ReactNativeUA.add_tag("tag"); // add only one tag 
+ReactNativeUA.remove_tag("tag"); // remove only one tag
+ReactNativeUA.set_trags(["tag-a", "tag-b"]); // overwrite all tags
+
+// add handler to handle all incoming notifications
+ReactNativeUA.subscribe_to("receivedNotification", (notification) => {
+  console.log(notification.type,
+              notification.data.aps.alert,
+              notification.data.link);
+});
+
+// remove already added handler
+ReactNativeUA.unsubscribe_to("receivedNotification");
+```
