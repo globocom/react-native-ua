@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashSet;
 
 import android.app.Activity;
+import android.app.Application;
 
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -23,7 +24,6 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
 
     public ReactNativeUA(ReactApplicationContext reactContext, Activity activity) {
         super(reactContext);
-
         mainActivity = activity;
     }
 
@@ -32,9 +32,8 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
         return "ReactNativeUAAndroid";
     }
 
-    @ReactMethod
-    public void takeOff() {
-        UAirship.takeOff(mainActivity.getApplication());
+    public static void takeOff(Application app) {
+        UAirship.takeOff(app);
     }
 
     @ReactMethod
