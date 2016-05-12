@@ -33,7 +33,6 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
     }
 
     public static void takeOff(Application app) {
-        // UAirship.takeOff(mainActivity.getApplication());
         UAirship.takeOff(app);
     }
 
