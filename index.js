@@ -44,12 +44,10 @@ class ReactNativeUA {
     }
 
     static subscribe_to (event, callback) {
-        console.log("EVANDROOOOOOOOOO - subscribe_to: " + event)
         subscriptions[event] = NativeAppEventEmitter.addListener(event, callback);
     }
 
     static unsubscribe_to (event) {
-        console.log("EVANDROOOOOOOOOO - unsubscribe_to: " + event)
         delete subscriptions[event].remove();
     }
 }
