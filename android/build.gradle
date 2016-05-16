@@ -2,6 +2,17 @@ apply plugin: 'com.android.library'
 
 repositories {
     jcenter()
+    maven {
+        url "https://urbanairship.bintray.com/android" // add urban repository
+    }
+}
+
+allprojects {
+    repositories {
+        maven {
+            url "https://urbanairship.bintray.com/android" // add urban repository
+        }
+    }
 }
 
 android {
@@ -20,7 +31,8 @@ android {
 }
 
 dependencies {
-    compile 'com.facebook.react:react-native:0.20.+'
+    compile 'com.facebook.react:react-native:+'
+
     compile ('com.urbanairship.android:urbanairship-sdk:7.1.+') {
         exclude module: 'support-v4'
     }

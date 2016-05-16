@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-class ReactNativeUAPackage implements ReactPackage {
+public class ReactNativeUAPackage implements ReactPackage {
 
     private Application mainApplication;
 
