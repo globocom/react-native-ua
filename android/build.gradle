@@ -21,5 +21,7 @@ android {
 
 dependencies {
     compile 'com.facebook.react:react-native:0.20.+'
-    compile 'com.urbanairship.android:urbanairship-sdk:7.1.+'
+    compile ('com.urbanairship.android:urbanairship-sdk:7.1.+') {
+        exclude module: 'support-v4'
+    }
 }

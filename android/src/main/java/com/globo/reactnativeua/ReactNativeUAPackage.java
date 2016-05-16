@@ -1,6 +1,6 @@
 package com.globo.reactnativeua;
 
-import android.app.Activity;
+import android.app.Application;
 
 import com.globo.reactnativeua.ReactNativeUA;
 
@@ -14,12 +14,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ReactNativeUAPackage implements ReactPackage {
 
-    private Activity mainActivity;
+class ReactNativeUAPackage implements ReactPackage {
 
-    public ReactNativeUAPackage(Activity activity) {
-        mainActivity = activity;
+    private Application mainApplication;
+
+    public ReactNativeUAPackage(Application application) {
+        mainApplication = application;
     }
 
     @Override
@@ -35,7 +36,10 @@ public class ReactNativeUAPackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
-        modules.add(new ReactNativeUA(reactContext, mainActivity));
+
+        modules.add(new ReactNativeUA(reactContext, mainApplication));
+
         return modules;
     }
+
 }
