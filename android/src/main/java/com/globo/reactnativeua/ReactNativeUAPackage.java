@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.globo.reactnativeua.ReactNativeUAEventEmitter;
 
 public class ReactNativeUAPackage implements ReactPackage {
 
@@ -36,6 +37,8 @@ public class ReactNativeUAPackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
+
+        ReactNativeUAEventEmitter.setup(reactContext);
 
         modules.add(new ReactNativeUA(reactContext, mainApplication));
 
