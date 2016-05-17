@@ -1,4 +1,4 @@
-package com.urbanairship.sample;
+package com.globo.reactnativeua;
 
 import android.content.Context;
 import android.content.Intent;
