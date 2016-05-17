@@ -2,16 +2,15 @@
 
 This plugin provides client-side integration for the [Urban Airship Engage Platform](http://docs.urbanairship.com) in _iOS_ and _Android_ app environment.
 
-<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+<!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
-- [React Native Module for Urban Airship](#react-native-module-for-urban-airship)
-	- [Supported React Native platforms](#supported-react-native-platforms)
-	- [Prerequisites](#prerequisites)
-		- [iOS](#ios)
-		- [Urban Airship](#urban-airship)
-	- [Getting Started](#getting-started)
-		- [Xcode setup](#xcode-setup)
-	- [Usage](#usage)
+- [Supported React Native platforms](#supported-react-native-platforms)
+- [Prerequisites](#prerequisites)
+	- [iOS](#ios)
+	- [Urban Airship](#urban-airship)
+- [Getting Started](#getting-started)
+	- [Xcode setup](#xcode-setup)
+- [Usage](#usage)
 
 <!-- /TOC -->
 
