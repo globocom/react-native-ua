@@ -43,8 +43,4 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
         UAirship.shared().getPushManager().editTags().removeTag(tag).apply();
     }
 
-    @ReactMethod
-    public void setTags(ReadableArray tags) {
-    }
-
 }

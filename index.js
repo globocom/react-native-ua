@@ -39,10 +39,6 @@ class ReactNativeUA {
         bridge.removeTag(tag);
     }
 
-    static set_tags (tags) {
-        bridge.setTags(tags);
-    }
-
     static subscribe_to (event, callback) {
         subscriptions[event] = NativeAppEventEmitter.addListener(event, callback);
     }
