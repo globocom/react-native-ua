@@ -1,4 +1,5 @@
 import {
+  DeviceEventEmitter,
   NativeAppEventEmitter,
   NativeModules,
   Platform
@@ -8,15 +9,18 @@ const ReactNativeUAIOS = NativeModules.ReactNativeUAIOS;
 const ReactNativeUAAndroid = NativeModules.ReactNativeUAAndroid;
 
 let bridge = null;
+let event_emitter = null;
 let subscriptions = {};
 
 switch (Platform.OS) {
     case 'ios':
         bridge = ReactNativeUAIOS;
+        event_emitter = NativeAppEventEmitter;
         break;
 
     case 'android':
         bridge = ReactNativeUAAndroid;
+        event_emitter = DeviceEventEmitter;
         break;
 }
 
@@ -40,11 +44,7 @@ class ReactNativeUA {
     }
 
     static subscribe_to (event, callback) {
-        subscriptions[event] = NativeAppEventEmitter.addListener(event, callback);
-    }
-
-    static unsubscribe_to (event) {
-        delete subscriptions[event].remove();
+        return event_emitter.addListener(event, callback);
     }
 }
 
