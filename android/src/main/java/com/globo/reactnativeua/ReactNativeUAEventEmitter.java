@@ -2,6 +2,8 @@ package com.globo.reactnativeua;
 
 import android.util.Log;
 
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
@@ -19,15 +21,20 @@ class ReactNativeUAEventEmitter {
     	this.context = reactContext;
 	}
 
-	private void sendEvent(String eventName, String message) {
-		Log.d(TAG, "Sending notification: " + message);
+	private ReadableMap createReactNativeMessageObject(PushMessage message) {
+		ReadableMap messageObject = Arguments.fromBundle(message.getPushBundle());
+		return messageObject;
+	}
+
+	public void sendEvent(String eventName, ReadableMap message) {
+		//Log.d(TAG, "Sending notification: " + message);
 		this.context
 			.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
 			.emit(eventName, message);
 	}
 
 	public void sendEvent(String eventName, PushMessage message) {
-		this.sendEvent(eventName, message.getAlert());
+		this.sendEvent(eventName, this.createReactNativeMessageObject(message));
 	}
 
 	public static void setup(ReactContext reactContext) {
