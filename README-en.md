@@ -1,6 +1,6 @@
 # React Native Module for Urban Airship
 
-This plugin provides client-side integration for the [Urban Airship Engage Platform](http://docs.urbanairship.com) in _iOS_ and _Android_ app environment.
+This plugin provides client-side integration for the [Urban Airship Engage Platform](https://www.urbanairship.com/products/engage) in _iOS_ and _Android_ app environment.
 
 <!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
@@ -24,13 +24,12 @@ This plugin provides client-side integration for the [Urban Airship Engage Platf
 ### iOS
 
 - Xcode 7.0 or higher
-- Homebrew
 - Node 4.4
 - React Native Command Line Tools
-- Watchman
-- Flow
 - Certificate from a Certificate Authority (CA)
 - iOS App Development Certificate
+- [Recommended] Watchman
+- [Recommended] Flow
 
 ### Urban Airship
 
@@ -95,10 +94,10 @@ npm install react-native-ua --save
 
   - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
   {
-  // setup react native urban airship
-  [ReactNativeUAIOS setupUrbanAirship];
+    // setup react native urban airship
+    [ReactNativeUAIOS setupUrbanAirship];
 
-  // ...
+    // ...
   }
 
   // ...
