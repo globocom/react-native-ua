@@ -9,18 +9,48 @@ const ReactNativeUAIOS = NativeModules.ReactNativeUAIOS;
 const ReactNativeUAAndroid = NativeModules.ReactNativeUAAndroid;
 
 let bridge = null;
-let event_emitter = null;
-let subscriptions = {};
+let notification_listeners = [];
+
+let call_notification_listeners = function (notification) {
+    var i = notification_listeners.length - 1;
+
+    for (i; i >= 0; i--) {
+        notification_listeners[i]({
+            'platform': notification.platform,
+            'event': notification.event,
+            'alert': notification.alert,
+            'data': notification.data
+        });
+    }
+}
 
 switch (Platform.OS) {
     case 'ios':
         bridge = ReactNativeUAIOS;
-        event_emitter = NativeAppEventEmitter;
+
+        NativeAppEventEmitter.addListener('receivedNotification', (notification) => {
+            call_notification_notification_listeners({
+                'platform': 'ios',
+                'event': notification.event,
+                'alert': notification.data.aps.alert,
+                'data': notification.data
+            });
+        });
+
         break;
 
     case 'android':
         bridge = ReactNativeUAAndroid;
-        event_emitter = DeviceEventEmitter;
+
+        DeviceEventEmitter.addListener('receivedNotification', (notification) => {
+            call_notification_notification_listeners({
+                'platform': 'android',
+                'event': notification.event,
+                'alert': notification['com.urbanairship.push.ALERT'],
+                'data': notification
+            });
+        });
+
         break;
 }
 
@@ -43,9 +73,10 @@ class ReactNativeUA {
         bridge.removeTag(tag);
     }
 
-    static subscribe_to (event, callback) {
-        return event_emitter.addListener(event, callback);
+    static on_notification (callback) {
+        notification_listeners.push(callback);
     }
+
 }
 
 export default ReactNativeUA

@@ -146,9 +146,10 @@ ReactNativeUA.add_tag("tag"); // add only one tag
 ReactNativeUA.remove_tag("tag"); // remove only one tag
 
 // add handler to handle all incoming notifications
-ReactNativeUA.subscribe_to("receivedNotification", (notification) => {
-  console.log(notification.type,
-              notification.data.aps.alert,
-              notification.data.link);
+ReactNativeUA.on_notitication((notification) => {
+  console.log(notification.platform,
+              notification.event,
+              notification.alert,
+              notification.data);
 });
 ```

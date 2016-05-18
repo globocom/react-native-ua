@@ -86,35 +86,35 @@ RCT_EXPORT_METHOD(removeTag:(NSString *)tag) {
 @implementation PushHandler
 
 - (void)receivedForegroundNotification:(NSDictionary *)notification fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"type": @"receivedForegroundNotification",
+    [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"event": @"receivedForegroundNotification",
                                                                                  @"data": notification}];
 
     completionHandler(UIBackgroundFetchResultNoData);
 }
 
 - (void)launchedFromNotification:(NSDictionary *)notification fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"type": @"launchedFromNotification",
+    [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"event": @"launchedFromNotification",
                                                                                  @"data": notification}];
 
     completionHandler(UIBackgroundFetchResultNoData);
 }
 
 - (void)launchedFromNotification:(NSDictionary *)notification actionIdentifier:(NSString *)identifier completionHandler:(void (^)())completionHandler {
-    [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"type": @"launchedFromNotificationActionButton",
+    [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"event": @"launchedFromNotificationActionButton",
                                                                                  @"data": notification}];
 
     completionHandler();
 }
 
 - (void)receivedBackgroundNotification:(NSDictionary *)notification actionIdentifier:(NSString *)identifier completionHandler:(void (^)())completionHandler {
-    [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"type": @"receivedBackgroundNotificationActionButton",
+    [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"event": @"receivedBackgroundNotificationActionButton",
                                                                                  @"data": notification}];
 
     completionHandler();
 }
 
 - (void)receivedBackgroundNotification:(NSDictionary *)notification fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"type": @"receivedBackgroundNotification",
+    [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"event": @"receivedBackgroundNotification",
                                                                                  @"data": notification}];
 
     completionHandler(UIBackgroundFetchResultNoData);
