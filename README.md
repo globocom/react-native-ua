@@ -43,6 +43,98 @@ React Native module for [Urban Airship](http://docs.urbanairship.com) platforms:
 @end
 ```
 
+#### Android setup
+- Dentro da sua aplicação modifique o arquivo `android/settings.gradle` incluindo o modulo **react-native-ua**:
+
+```
+include ':react-native-ua'
+project(':react-native-ua').projectDir = file('../node_modules/react-native-ua/android')
+```
+- Adicione a url do repositório Urban Airship em seu projeto `android/build.gradle`:
+
+```
+// ...
+
+allprojects {
+    repositories {
+        // ...
+
+        maven {
+            // ...
+
+            url "https://urbanairship.bintray.com/android" // add urban repository url
+        }
+    }
+}
+```
+- Inclua o modulo do react-native-ua nas depenciais de compilação da sua aplicação dentro do arquivo `android/app/build.gradle`:
+```
+// ...
+
+dependencies {
+    // ...
+
+    compile project(':react-native-ua') // add react-native-ua module
+}
+```
+- Insira no manifesto da sua aplicação `android/app/src/main/AndroidManifest.xml` as permissões do módulo:
+```
+<manifest ...>
+
+    // ...
+
+    <application ...>
+
+      // ...
+
+      <receiver
+          android:name="com.globo.reactnativeua.ReactNativeUAReceiver"
+          android:exported="false">
+          <intent-filter>
+              <action android:name="com.urbanairship.push.CHANNEL_UPDATED"/>
+              <action android:name="com.urbanairship.push.OPENED"/>
+              <action android:name="com.urbanairship.push.DISMISSED"/>
+              <action android:name="com.urbanairship.push.RECEIVED"/>
+              <category android:name="${applicationId}"/>
+          </intent-filter>
+      </receiver>
+
+    </application>
+</manifest>
+```
+- Crie o arquivo `android/app/src/main/assets/airshipconfig.propiertes` ***(crie o diretório caso não exista)*** e atualize o com os dados da sua aplicação Urban Airship:
+```
+gcmSender = Your GCM sender ID (Your Google API project number)
+
+developmentAppKey = Your Development App Key
+developmentAppSecret = Your Development App Secret
+
+# If inProduction is true set production key and secret
+inProduction = false
+
+productionAppKey = Your Production App Key
+productionAppSecret = Your Production Secret
+```
+- Dentro da `MainActivity.java` da sua aplicação, importe o pacote `ReactNativeUAPackage` e adicione na lista de pacotes da sua aplicação:
+```
+// ...
+
+import com.globo.reactnativeua.ReactNativeUAPackage; // import react-native-ua package
+
+public class MainActivity extends ReactActivity {
+    // ...
+
+    @Override
+    protected List<ReactPackage> getPackages() {
+        return Arrays.<ReactPackage>asList(
+            // ...
+            new ReactNativeUAPackage(this.getApplication()) // add react-native-ua package
+        );
+    }
+}
+
+```
+
 ### Usage
 
 ``` javascript
@@ -59,7 +151,4 @@ ReactNativeUA.subscribe_to("receivedNotification", (notification) => {
               notification.data.aps.alert,
               notification.data.link);
 });
-
-// remove already added handler
-ReactNativeUA.unsubscribe_to("receivedNotification");
 ```
