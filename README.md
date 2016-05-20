@@ -1,4 +1,4 @@
-# React Native: Urban Airship Module
+# React Native (0.25): Urban Airship Module
 
 React Native module for [Urban Airship](http://docs.urbanairship.com) platforms: *iOS* and *Android*
 
@@ -7,7 +7,7 @@ React Native module for [Urban Airship](http://docs.urbanairship.com) platforms:
 - Ter uma app configurada para as plataformas IOS e/ou Android no [UrbanAirship > Add New App](https://go.urbanairship.com/apps/new/).
 
 ### Installation
-- Acesse seu projeto React Native e instale o módulo: `npm install react-native-ua --save`
+- Acesse seu projeto React Native (0.25) e instale o módulo: `npm install react-native-ua --save`
 
 #### iOS setup
 - Abrir o projeto IOS da sua app React Native no Xcode;
