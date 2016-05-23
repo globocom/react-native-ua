@@ -6,9 +6,11 @@ This plugin provides client-side integration for the [Urban Airship Engage Platf
 
 - [Supported React Native platforms](#supported-react-native-platforms)
 - [Prerequisites](#prerequisites)
+	- [Android](#android)
 	- [iOS](#ios)
 	- [Urban Airship](#urban-airship)
 - [Getting Started](#getting-started)
+	- [Android setup](#android-setup)
 	- [Xcode setup](#xcode-setup)
 - [Usage](#usage)
 
@@ -16,10 +18,19 @@ This plugin provides client-side integration for the [Urban Airship Engage Platf
 
 ## Supported React Native platforms
 
-- iOS (8+)
 - Android (4.1+)
+- iOS (8+)
+- React Native (0.25)
 
 ## Prerequisites
+
+### Android
+
+- Android Studio 2.0 or higher
+- Node 4.4
+- React Native Commnad Line Tools
+- [Recommended] Watchman
+- [Recommended] Flow
 
 ### iOS
 
@@ -42,6 +53,107 @@ In your React Native project, install the following module:
 ```shell
 npm install react-native-ua --save
 ```
+
+### Android setup
+
+1. Include the following module to your `android/settings.gradle` in your React Native project:
+
+  ```java
+  include ':react-native-ua'
+  project(':react-native-ua').projectDir = file('../node_modules/react-native-ua/android')
+  ```
+
+2. Add Urban Airship's repository url in your `android/build.gradle` file:
+
+  ```java
+  // ...
+
+  allprojects {
+      repositories {
+          // ...
+
+          maven {
+              // ...
+
+              url "https://urbanairship.bintray.com/android" // add urban repository url
+          }
+      }
+  }
+  ```
+
+3. Include the `react-native-ua` module in your app compile dependencies, inside the `android/app/build.gradle` file:
+
+  ```java
+  // ...
+
+  dependencies {
+      // ...
+
+      compile project(':react-native-ua') // add react-native-ua module
+  }
+  ```
+
+4. Add to your app manifest (`android/app/src/main/AndroidManifest.xml`) these permissions:
+
+  ```xml
+  <manifest ...>
+
+      // ...
+
+      <application ...>
+
+        // ...
+
+        <receiver
+            android:name="com.globo.reactnativeua.ReactNativeUAReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.urbanairship.push.CHANNEL_UPDATED"/>
+                <action android:name="com.urbanairship.push.OPENED"/>
+                <action android:name="com.urbanairship.push.DISMISSED"/>
+                <action android:name="com.urbanairship.push.RECEIVED"/>
+                <category android:name="${applicationId}"/>
+            </intent-filter>
+        </receiver>
+
+      </application>
+  </manifest>
+  ```
+
+5. Create the `android/app/src/main/assets/airshipconfig.properties` file and update it with your Urban Airship App's data:
+
+  ```java
+  gcmSender = Your GCM sender ID (Your Google API project number)
+
+  developmentAppKey = Your Development App Key
+  developmentAppSecret = Your Development App Secret
+
+  # If inProduction is true set production key and secret
+  inProduction = false
+
+  productionAppKey = Your Production App Key
+  productionAppSecret = Your Production Secret
+  ```
+
+6. Inside `MainActivity.java`, located at `android/app/src/main/java/your/app/domain`, add the `ReactNativeUAPackage` to your app package list:
+
+  ```java
+  // ...
+
+  import com.globo.reactnativeua.ReactNativeUAPackage; // import react-native-ua package
+
+  public class MainActivity extends ReactActivity {
+      // ...
+
+      @Override
+      protected List<ReactPackage> getPackages() {
+          return Arrays.<ReactPackage>asList(
+              // ...
+              new ReactNativeUAPackage(this.getApplication()) // add react-native-ua package
+          );
+      }
+  }
+  ```
 
 ### Xcode setup
 
@@ -114,15 +226,12 @@ ReactNativeUA.enable_notification(); // prompt user to enable notification
 ReactNativeUA.disable_notification(); // prompt user to disable notification
 ReactNativeUA.add_tag("tag"); // add only one tag
 ReactNativeUA.remove_tag("tag"); // remove only one tag
-ReactNativeUA.set_trags(["tag-a", "tag-b"]); // overwrite all tags
 
 // add handler to handle all incoming notifications
-ReactNativeUA.subscribe_to("receivedNotification", (notification) => {
-  console.log(notification.type,
-              notification.data.aps.alert,
-              notification.data.link);
+ReactNativeUA.on_notitication((notification) => {
+  console.log(notification.platform,
+              notification.event,
+              notification.alert,
+              notification.data);
 });
-
-// remove already added handler
-ReactNativeUA.unsubscribe_to("receivedNotification");
 ```
