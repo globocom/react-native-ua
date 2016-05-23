@@ -29,7 +29,7 @@ switch (Platform.OS) {
         bridge = ReactNativeUAIOS;
 
         NativeAppEventEmitter.addListener('receivedNotification', (notification) => {
-            call_notification_notification_listeners({
+            call_notification_listeners({
                 'platform': 'ios',
                 'event': notification.event,
                 'alert': notification.data.aps.alert,
@@ -43,7 +43,7 @@ switch (Platform.OS) {
         bridge = ReactNativeUAAndroid;
 
         DeviceEventEmitter.addListener('receivedNotification', (notification) => {
-            call_notification_notification_listeners({
+            call_notification_listeners({
                 'platform': 'android',
                 'event': notification.event,
                 'alert': notification['com.urbanairship.push.ALERT'],
