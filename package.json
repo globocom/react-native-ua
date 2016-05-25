@@ -1,6 +1,6 @@
 {
   "name": "react-native-ua",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "React Native module for Urban Airship platforms: iOS and Android",
   "main": "index.js",
   "homepage": "https://github.com/globocom/react-native-ua#readme",
@@ -25,7 +25,6 @@
     "type": "git",
     "url": "git+ssh://git@github.com:globocom/react-native-ua.git"
   },
-  "peerDependencies": {
-    "react-native": "^0.26.0"
-  }
+  "author": "Globo.com <http://zo0r.me>",
+  "license": "MIT"
 }
