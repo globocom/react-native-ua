@@ -1,17 +1,24 @@
 apply plugin: 'com.android.library'
 
-repositories {
-    jcenter()
-    maven {
-        url "https://urbanairship.bintray.com/android" // add urban repository
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.0'
     }
 }
 
-allprojects {
-    repositories {
-        maven {
-            url "https://urbanairship.bintray.com/android" // add urban repository
-        }
+repositories {
+    mavenLocal()
+    jcenter()
+
+    maven {
+        url "$projectDir/../../../react-native/android"
+    }
+
+    maven {
+        url  "https://urbanairship.bintray.com/android"
     }
 }
 
@@ -31,9 +38,9 @@ android {
 }
 
 dependencies {
-    compile 'com.facebook.react:react-native:+'
-
-    compile ('com.urbanairship.android:urbanairship-sdk:7.1.+') {
-        exclude module: 'support-v4'
-    }
+    compile "com.android.support:appcompat-v7:23.0.1"
+    compile "com.facebook.react:react-native:+"
+    compile "com.urbanairship.android:urbanairship-sdk:7.1.+"
+    compile "com.android.support:cardview-v7:23.3.0"
+    compile "com.google.android.gms:play-services-location:8.4.0"
 }

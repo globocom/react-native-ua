@@ -1,55 +1,53 @@
 package com.globo.reactnativeua;
 
+import android.os.Bundle;
 import android.util.Log;
 
-import android.os.Bundle;
-
 import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import com.urbanairship.push.PushMessage;
 
-class ReactNativeUAEventEmitter {
 
-    private static final String TAG = "ReactNativeUAEventEmitter";
+public class ReactNativeUAEventEmitter {
 
-	private static ReactNativeUAEventEmitter INSTANCE = null;
+    private static final String TAG = "RNUAEventEmitter";
 
-	private ReactContext context;
+    private static ReactNativeUAEventEmitter INSTANCE = null;
 
-	private ReactNativeUAEventEmitter(ReactContext reactContext) {
-    	this.context = reactContext;
-	}
+    private ReactContext context;
 
-	private ReadableMap createReactNativeMessageObject(CharSequence eventName, PushMessage message) {
-		Bundle messageBundle = message.getPushBundle();
+    private ReactNativeUAEventEmitter(ReactContext reactContext) {
+        this.context = reactContext;
+    }
 
-		messageBundle.putCharSequence("event", eventName);
+    private ReadableMap createReactNativeMessageObject(CharSequence eventName, PushMessage message) {
+        Bundle messageBundle = message.getPushBundle();
 
-		ReadableMap messageObject = Arguments.fromBundle(messageBundle);
+        messageBundle.putCharSequence("event", eventName);
 
-		return messageObject;
-	}
+        ReadableMap messageObject = Arguments.fromBundle(messageBundle);
 
-	public void sendEvent(String eventName, PushMessage message) {
-		this.context
-			.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-			.emit("receivedNotification", this.createReactNativeMessageObject(eventName, message));
-	}
+        return messageObject;
+    }
 
-	public static void setup(ReactContext reactContext) {
-		if (ReactNativeUAEventEmitter.INSTANCE == null) {
-			ReactNativeUAEventEmitter.INSTANCE = new ReactNativeUAEventEmitter(reactContext);
-			return;
-		} else {
-			Log.w(TAG, "Event Emmitter initialized more than once");
-			return;
-		}
-	}
+    public void sendEvent(String eventName, PushMessage message) {
+        this.context
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit("receivedNotification", this.createReactNativeMessageObject(eventName, message));
+    }
 
-	public static ReactNativeUAEventEmitter getInstance() {
-		return ReactNativeUAEventEmitter.INSTANCE;
-	}
+    public static void setup(ReactContext reactContext) {
+        if (ReactNativeUAEventEmitter.INSTANCE == null) {
+            ReactNativeUAEventEmitter.INSTANCE = new ReactNativeUAEventEmitter(reactContext);
+        } else {
+            Log.w(TAG, "Event Emitter initialized more than once");
+        }
+    }
+
+    public static ReactNativeUAEventEmitter getInstance() {
+        return ReactNativeUAEventEmitter.INSTANCE;
+    }
 }

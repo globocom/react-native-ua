@@ -1,19 +1,17 @@
 package com.globo.reactnativeua;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import com.urbanairship.AirshipReceiver;
 import com.urbanairship.push.PushMessage;
 
 import com.globo.reactnativeua.ReactNativeUAEventEmitter;
 
+
 public class ReactNativeUAReceiver extends AirshipReceiver {
 
-    private static final String TAG = "ReactNativeUAReceiver";
+    private static final String TAG = "RNUAReceiver";
 
     @Override
     protected void onPushReceived(@NonNull Context context, @NonNull PushMessage message, boolean notificationPosted) {
