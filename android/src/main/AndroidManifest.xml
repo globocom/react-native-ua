@@ -14,5 +14,9 @@
             </intent-filter>
         </receiver>
 
+        <meta-data
+            android:name="com.urbanairship.autopilot"
+            android:value="com.globo.reactnativeua.ReactNativeUAAutoPilot"/>
+
     </application>
 </manifest>
