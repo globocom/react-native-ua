@@ -17,9 +17,6 @@ repositories {
         url "$projectDir/../../../react-native/android"
     }
 
-    maven {
-        url  "https://urbanairship.bintray.com/android"
-    }
 }
 
 android {

@@ -67,25 +67,7 @@ npm install react-native-ua --save
   project(':react-native-ua').projectDir = file('../node_modules/react-native-ua/android')
   ```
 
-2. Add Urban Airship's repository url in your `android/build.gradle` file:
-
-  ```java
-  // ...
-
-  allprojects {
-      repositories {
-          // ...
-
-          maven {
-              // ...
-
-              url "https://urbanairship.bintray.com/android" // add urban repository url
-          }
-      }
-  }
-  ```
-
-3. Include the `react-native-ua` module in your app compile dependencies, inside the `android/app/build.gradle` file:
+2. Include the `react-native-ua` module in your app compile dependencies, inside the `android/app/build.gradle` file:
 
   ```java
   // ...
@@ -97,34 +79,7 @@ npm install react-native-ua --save
   }
   ```
 
-4. Add to your app manifest (`android/app/src/main/AndroidManifest.xml`) these permissions:
-
-  ```xml
-  <manifest ...>
-
-      // ...
-
-      <application ...>
-
-        // ...
-
-        <receiver
-            android:name="com.globo.reactnativeua.ReactNativeUAReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.urbanairship.push.CHANNEL_UPDATED"/>
-                <action android:name="com.urbanairship.push.OPENED"/>
-                <action android:name="com.urbanairship.push.DISMISSED"/>
-                <action android:name="com.urbanairship.push.RECEIVED"/>
-                <category android:name="${applicationId}"/>
-            </intent-filter>
-        </receiver>
-
-      </application>
-  </manifest>
-  ```
-
-5. Create the `android/app/src/main/assets/airshipconfig.properties` file and update it with your Urban Airship App's data:
+3. Create the `android/app/src/main/assets/airshipconfig.properties` file and update it with your Urban Airship App's data:
 
   ```java
   gcmSender = Your GCM sender ID (Your Google API project number)
@@ -139,7 +94,7 @@ npm install react-native-ua --save
   productionAppSecret = Your Production Secret
   ```
 
-6. Inside `MainActivity.java`, located at `android/app/src/main/java/your/app/domain`, add the `ReactNativeUAPackage` to your app package list:
+4. Inside `MainActivity.java`, located at `android/app/src/main/java/your/app/domain`, add the `ReactNativeUAPackage` to your app package list:
 
   ```java
   // ...
