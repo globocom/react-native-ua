@@ -24,7 +24,5 @@
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com:globocom/react-native-ua.git"
-  },
-  "author": "Globo.com <http://zo0r.me>",
-  "license": "MIT"
+  }
 }
