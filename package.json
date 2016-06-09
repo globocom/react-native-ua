@@ -19,6 +19,11 @@
       "email": "tmpapageorgiou@gmail.com"
     }
     ],
+  "dependencies": {
+  },
+  "engines": {
+    "npm": "^2.0.0"
+  },
   "license": "MIT",
   "keywords": [
     "react-component",
