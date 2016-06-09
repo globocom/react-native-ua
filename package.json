@@ -4,7 +4,21 @@
   "description": "React Native module for Urban Airship platforms: iOS and Android",
   "main": "index.js",
   "homepage": "https://github.com/globocom/react-native-ua#readme",
-  "author": "Globo.com <https://github.com/globocom>",
+  "author": "Globo.com",
+  "contributors":[
+    {
+      "name": "Evandro Eisinger",
+      "email": "evandroeisinger@gmail.com"
+    },
+    {
+      "name": "Lucas Stephanou",
+      "email": "lucas@lucas-ts.com"
+    },
+    {
+      "name": "Thiago Papageorgiou",
+      "email": "tmpapageorgiou@gmail.com"
+    }
+    ],
   "license": "MIT",
   "keywords": [
     "react-component",
