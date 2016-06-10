@@ -1,6 +1,6 @@
 {
   "name": "react-native-ua",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "React Native module for Urban Airship platforms: iOS and Android",
   "main": "index.js",
   "homepage": "https://github.com/globocom/react-native-ua#readme",
