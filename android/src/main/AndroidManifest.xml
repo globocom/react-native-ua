@@ -1,3 +1,22 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.globo.reactnativeua">
+
+    <application>
+        <receiver
+            android:name="com.globo.reactnativeua.ReactNativeUAReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.urbanairship.push.CHANNEL_UPDATED"/>
+                <action android:name="com.urbanairship.push.OPENED"/>
+                <action android:name="com.urbanairship.push.DISMISSED"/>
+                <action android:name="com.urbanairship.push.RECEIVED"/>
+                <category android:name="${applicationId}"/>
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+            android:name="com.urbanairship.autopilot"
+            android:value="com.globo.reactnativeua.ReactNativeUAAutoPilot"/>
+
+    </application>
 </manifest>
