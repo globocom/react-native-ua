@@ -73,6 +73,10 @@ class ReactNativeUA {
         bridge.removeTag(tag);
     }
 
+    static setNamedUserId (nameUserId) {
+        bridge.setNamedUserId(nameUserId);
+    }
+
     static on_notification (callback) {
         notification_listeners.push(callback);
     }

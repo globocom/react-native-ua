@@ -5,6 +5,7 @@ import android.app.Application;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+
 import com.urbanairship.Autopilot;
 import com.urbanairship.UAirship;
 
@@ -40,5 +41,10 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
     @ReactMethod
     public void removeTag(String tag) {
         UAirship.shared().getPushManager().editTags().removeTag(tag).apply();
+    }
+
+    @ReactMethod
+    public void setNamedUserId(String namedUserID) {
+        UAirship.shared().getPushManager().getNamedUser().setId(namedUserID);
     }
 }
