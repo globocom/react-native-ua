@@ -24,7 +24,7 @@ This plugin provides client-side integration for the [Urban Airship Engage Platf
 
 - Android (4.1+)
 - iOS (8+)
-- React Native (0.25)
+- React Native (0.27)
 
 ## Prerequisites
 
