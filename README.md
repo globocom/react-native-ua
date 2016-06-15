@@ -187,7 +187,7 @@ ReactNativeUA.add_tag("tag"); // add only one tag
 ReactNativeUA.remove_tag("tag"); // remove only one tag
 
 // add handler to handle all incoming notifications
-ReactNativeUA.on_notitication((notification) => {
+ReactNativeUA.on_notification((notification) => {
   console.log(notification.platform,
               notification.event,
               notification.alert,
