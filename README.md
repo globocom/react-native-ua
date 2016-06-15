@@ -10,12 +10,13 @@ This plugin provides client-side integration for the [Urban Airship Engage Platf
 
 - [Supported React Native platforms](#supported-react-native-platforms)
 - [Prerequisites](#prerequisites)
-	- [Android](#android)
-	- [iOS](#ios)
-	- [Urban Airship](#urban-airship)
+  - [Android](#android)
+  - [iOS](#ios)
+  - [Urban Airship](#urban-airship)
 - [Getting Started](#getting-started)
-	- [Android setup](#android-setup)
-	- [Xcode setup](#xcode-setup)
+  - [Android setup](#android-setup)
+  - [Xcode setup](#xcode-setup)
+- [Methods](#methods)
 - [Usage](#usage)
 
 <!-- /TOC -->
@@ -175,22 +176,58 @@ npm install react-native-ua --save
 
   @end
   ```
+  
+## Methods
+- **[ReactNativeUA.enable_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L60)**: Prompt user to enable notification receivement;
+- **[ReactNativeUA.disable_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L64)**: Prompt user to disable notification receivement;
+- **[ReactNativeUA.add_tag("tag")](https://github.com/globocom/react-native-ua/blob/master/index.js#L68)**: Set tag to the user;
+- **[ReactNativeUA.remove_tag("tag")](https://github.com/globocom/react-native-ua/blob/master/index.js#L72)**: Remove added tag;
+- **[ReactNativeUA.on_notification((notification) => {})](https://github.com/globocom/react-native-ua/blob/master/index.js#L76)**: Add handler to handle all incoming notifications. **Attention:** this method need to be called on `componentWillMount()` of the component lifecycle.
 
 ## Usage
 
 ```javascript
+import React, { Component } from 'react';
+
+import {
+    AppRegistry,
+    Text,
+    View
+} from 'react-native';
+
 import ReactNativeUA from 'react-native-ua'; // import module
 
-ReactNativeUA.enable_notification(); // prompt user to enable notification
-ReactNativeUA.disable_notification(); // prompt user to disable notification
-ReactNativeUA.add_tag("tag"); // add only one tag
-ReactNativeUA.remove_tag("tag"); // remove only one tag
 
-// add handler to handle all incoming notifications
-ReactNativeUA.on_notification((notification) => {
-  console.log(notification.platform,
-              notification.event,
-              notification.alert,
-              notification.data);
-});
+class SampleApp extends Component {
+
+    constructor (props) {
+        super(props);
+
+        ReactNativeUA.enable_notification(); // prompt user to enable notification
+    } 
+
+    componentWillMount () {
+    
+        // add handler to handle all incoming notifications
+        ReactNativeUA.on_notification((notification) => {
+            console.log('notification:',
+                        notification.platform,
+                        notification.event,
+                        notification.alert,
+                        notification.data);
+
+            alert(notification.alert);
+        });
+    }
+
+    render () { 
+        return (
+            <View>
+                <Text>ReactNativeUA</Text>
+            </View>
+        );
+    }
+}
+
+AppRegistry.registerComponent('SampleApp', () => SampleApp);
 ```
