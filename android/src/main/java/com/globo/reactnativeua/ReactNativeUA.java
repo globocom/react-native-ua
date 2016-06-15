@@ -14,7 +14,7 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
     public ReactNativeUA(ReactApplicationContext reactContext, Application application) {
         super(reactContext);
 
-        Autopilot.automaticTakeOff(application);
+        Autopilot.automaticTakeOff(application.getApplicationContext());
     }
 
     @Override

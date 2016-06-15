@@ -44,6 +44,10 @@ public class ReactNativeUAEventEmitter {
             ReactNativeUAEventEmitter.INSTANCE = new ReactNativeUAEventEmitter(reactContext);
         } else {
             Log.w(TAG, "Event Emitter initialized more than once");
+
+            if (ReactNativeUAEventEmitter.INSTANCE.context.getCatalystInstance().isDestroyed()) {
+                ReactNativeUAEventEmitter.INSTANCE = new ReactNativeUAEventEmitter(reactContext);
+            }
         }
     }
 
