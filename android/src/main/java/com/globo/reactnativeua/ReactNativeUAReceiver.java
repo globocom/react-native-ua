@@ -1,41 +1,51 @@
 package com.globo.reactnativeua;
 
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 
 import com.urbanairship.AirshipReceiver;
 import com.urbanairship.push.PushMessage;
+
+import java.util.List;
 
 
 public class ReactNativeUAReceiver extends AirshipReceiver {
 
     @Override
     protected void onPushReceived(@NonNull Context context, @NonNull PushMessage message, boolean notificationPosted) {
-        if (ReactNativeUAEventEmitter.getInstance() != null) {
-            ReactNativeUAEventEmitter.getInstance().sendEvent("onPushReceived", message);
-        }
-    }
+        boolean isRunning = isApplicationRunning(context);
 
-    @Override
-    protected void onNotificationPosted(@NonNull Context context, @NonNull NotificationInfo notificationInfo) {
-        if (ReactNativeUAEventEmitter.getInstance() != null) {
-            ReactNativeUAEventEmitter.getInstance().sendEvent("onNotificationPosted", notificationInfo.getMessage());
+        if (isRunning && ReactNativeUAEventEmitter.getInstance() != null) {
+            ReactNativeUAEventEmitter.getInstance().sendEvent("onNotificationOpened", message);
         }
     }
 
     @Override
     protected boolean onNotificationOpened(@NonNull Context context, @NonNull NotificationInfo notificationInfo) {
-        if (ReactNativeUAEventEmitter.getInstance() != null) {
-            ReactNativeUAEventEmitter.getInstance().sendEvent("onNotificationOpened", notificationInfo.getMessage());
-        }
+        Intent intent = new Intent();
+
+        intent.setAction("com.urbanairship.push.RECEIVED");
+        intent.putExtra("com.urbanairship.push.EXTRA_PUSH_MESSAGE_BUNDLE", notificationInfo.getMessage().getPushBundle());
+
+        context.sendBroadcast(intent);
 
         return false;
     }
 
-    @Override
-    protected boolean onNotificationOpened(@NonNull Context context, @NonNull NotificationInfo notificationInfo, @NonNull ActionButtonInfo actionButtonInfo) {
-        if (ReactNativeUAEventEmitter.getInstance() != null) {
-            ReactNativeUAEventEmitter.getInstance().sendEvent("onNotificationOpened", notificationInfo.getMessage());
+    private boolean isApplicationRunning(Context context) {
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> processInfos = activityManager.getRunningAppProcesses();
+        
+        for (ActivityManager.RunningAppProcessInfo processInfo : processInfos) {
+            if (processInfo.processName.equals(context.getPackageName())) {
+                if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                    for (String d: processInfo.pkgList) {
+                        return true;
+                    }
+                }
+            }
         }
 
         return false;
