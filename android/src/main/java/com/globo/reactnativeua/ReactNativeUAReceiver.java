@@ -29,7 +29,8 @@ public class ReactNativeUAReceiver extends AirshipReceiver {
         intent.setAction("com.urbanairship.push.RECEIVED");
         intent.putExtra("com.urbanairship.push.EXTRA_PUSH_MESSAGE_BUNDLE", notificationInfo.getMessage().getPushBundle());
 
-        context.sendBroadcast(intent);
+        if (ReactNativeUAEventEmitter.getInstance() == null) ReactNativeUAReceiverHelper.setup(context).savePushIntent(intent);
+        else context.sendBroadcast(intent);
 
         return false;
     }
