@@ -20,13 +20,21 @@ static PushHandler *pushHandler = nil;
     return pushHandler;
 }
 
-+ (void)setupUrbanAirship {
++ (void)setupUrbanAirship:(NSDictionary *) launchOptions {
     UAConfig *config = [UAConfig defaultConfig];
 
     [UAirship takeOff:config];
 
     pushHandler = [PushHandler new];
     [UAirship push].pushNotificationDelegate = pushHandler;
+
+    [[ReactNativeUAIOS getInstance] verifyLaunchOptions:launchOptions];
+}
+
+- (void)verifyLaunchOptions:(NSDictionary *) launchOptions {
+    NSDictionary *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+    
+    if (notification == nil) [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"push_notification_opened_from_background"];
 }
 
 - (dispatch_queue_t)methodQueue {
@@ -84,6 +92,20 @@ RCT_EXPORT_METHOD(setNamedUserId:(NSString *)nameUserId) {
     [UAirship push].namedUser.identifier = nameUserId;
 }
 
+RCT_EXPORT_METHOD(handleBackgroundNotification) {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    if ([defaults objectForKey:@"push_notification_opened_from_background"]) {
+        
+        NSDictionary *notification = [defaults objectForKey:@"push_notification_opened_from_background"];
+        
+        [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"event": @"launchedFromNotification",
+                                                                                     @"data": notification}];
+        
+        [defaults removeObjectForKey:@"push_notification_opened_from_background"];
+    }
+}
+
 @end
 
 
@@ -99,6 +121,11 @@ RCT_EXPORT_METHOD(setNamedUserId:(NSString *)nameUserId) {
 - (void)launchedFromNotification:(NSDictionary *)notification fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"event": @"launchedFromNotification",
                                                                                  @"data": notification}];
+
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    [defaults setObject:notification forKey:@"push_notification_opened_from_background"];
+    [defaults synchronize];
 
     completionHandler(UIBackgroundFetchResultNoData);
 }
