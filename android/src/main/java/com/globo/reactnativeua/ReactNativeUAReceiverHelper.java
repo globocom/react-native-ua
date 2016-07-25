@@ -3,10 +3,8 @@ package com.globo.reactnativeua;
 import android.content.Context;
 import android.content.Intent;
 
-import com.facebook.react.bridge.LifecycleEventListener;
 
-
-public class ReactNativeUAReceiverHelper implements LifecycleEventListener {
+public class ReactNativeUAReceiverHelper {
 
     private static ReactNativeUAReceiverHelper INSTANCE = null;
 
@@ -17,19 +15,12 @@ public class ReactNativeUAReceiverHelper implements LifecycleEventListener {
 
     public void savePushIntent(Intent intent) { this.pushIntent = intent; }
 
-    @Override
-    public void onHostResume() {
+    public void sendPushIntent() {
         if (pushIntent != null) {
             context.sendBroadcast(pushIntent);
             pushIntent = null;
         }
     }
-
-    @Override
-    public void onHostPause() { }
-
-    @Override
-    public void onHostDestroy() { }
 
     public static ReactNativeUAReceiverHelper setup(Context context) {
         if (ReactNativeUAReceiverHelper.INSTANCE == null) {

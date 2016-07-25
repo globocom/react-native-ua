@@ -65,6 +65,10 @@ class ReactNativeUA {
         bridge.disableNotification();
     }
 
+    static handle_background_notification () {
+        bridge.handleBackgroundNotification();
+    }
+
     static add_tag (tag) {
         bridge.addTag(tag);
     }

@@ -38,8 +38,6 @@ public class ReactNativeUAPackage implements ReactPackage {
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
 
-        reactContext.addLifecycleEventListener(ReactNativeUAReceiverHelper.setup(reactContext));
-
         ReactNativeUAEventEmitter.setup(reactContext);
 
         modules.add(new ReactNativeUA(reactContext, mainApplication));

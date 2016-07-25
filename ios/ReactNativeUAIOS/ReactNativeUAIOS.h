@@ -2,7 +2,7 @@
 #import "UAPush.h"
 
 @interface ReactNativeUAIOS : NSObject <RCTBridgeModule>
-+ (void)setupUrbanAirship;
++ (void)setupUrbanAirship:(NSDictionary *) launchOptions;
 @end
 
 @interface PushHandler : NSObject <UAPushNotificationDelegate>
