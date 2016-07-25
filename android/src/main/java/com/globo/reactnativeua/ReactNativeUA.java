@@ -47,4 +47,9 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
     public void setNamedUserId(String namedUserID) {
         UAirship.shared().getPushManager().getNamedUser().setId(namedUserID);
     }
+
+    @ReactMethod
+    public void handleBackgroundNotification() {
+        ReactNativeUAReceiverHelper.setup(getCurrentActivity().getApplicationContext()).sendPushIntent();
+    }
 }
