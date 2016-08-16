@@ -176,10 +176,16 @@ npm install react-native-ua --save
 
   @end
   ```
+
+9. To enable location add this two string keys with their values inside Info.plist:
+
+  - NSLocationAlwaysUsageDescription: Urban Airship location service
+  - NSLocationWhenInUseUsageDescription: Urban Airship location service when app is in use
   
 ## Methods
 - **[ReactNativeUA.enable_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L60)**: Prompt user to enable notification receivement;
 - **[ReactNativeUA.disable_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L64)**: Prompt user to disable notification receivement;
+- **[ReactNativeUA.enable_geolocation()](https://github.com/globocom/react-native-ua/blob/master/index.js#L88)**: Prompt user to enable geolocation;
 - **[ReactNativeUA.handle_background_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L68)**: Handle notifications when app is in background;
 - **[ReactNativeUA.add_tag("tag")](https://github.com/globocom/react-native-ua/blob/master/index.js#L68)**: Set tag to the user;
 - **[ReactNativeUA.remove_tag("tag")](https://github.com/globocom/react-native-ua/blob/master/index.js#L72)**: Remove added tag;
@@ -205,6 +211,8 @@ class SampleApp extends Component {
         super(props);
 
         ReactNativeUA.enable_notification(); // prompt user to enable notification
+
+        ReactNativeUA.enable_geolocation(); // prompt user to enable geolocation
 
         ReactNativeUA.handle_background_notification(); // handle notifications when app is in background
     } 

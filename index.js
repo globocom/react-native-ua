@@ -85,6 +85,10 @@ class ReactNativeUA {
         notification_listeners.push(callback);
     }
 
+    static enable_geolocation () {
+        bridge.enableGeolocation();
+    }
+
 }
 
 export default ReactNativeUA
