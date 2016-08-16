@@ -155,7 +155,7 @@ npm install react-native-ua --save
     node_modules/react-native-ua/ios/Libraries/Airship/AirshipResources.bundle
     ```
 
-8. Inside `AppDelegate.m`, import `ReactNativeUAIOS.h` and call the module with `[ReactNativeUAIOS setupUrbanAirship]`. Follow the example below:
+8. Inside `AppDelegate.m`, import `ReactNativeUAIOS.h` and call the module with `[ReactNativeUAIOS setupUrbanAirship:launchOptions]`. Follow the example below:
 
   ```objective-c
   #import "ReactNativeUAIOS.h"
@@ -167,7 +167,7 @@ npm install react-native-ua --save
   - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
   {
     // setup react native urban airship
-    [ReactNativeUAIOS setupUrbanAirship];
+    [ReactNativeUAIOS setupUrbanAirship:launchOptions];
 
     // ...
   }
@@ -180,6 +180,7 @@ npm install react-native-ua --save
 ## Methods
 - **[ReactNativeUA.enable_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L60)**: Prompt user to enable notification receivement;
 - **[ReactNativeUA.disable_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L64)**: Prompt user to disable notification receivement;
+- **[ReactNativeUA.handle_background_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L68)**: Handle notifications when app is in background;
 - **[ReactNativeUA.add_tag("tag")](https://github.com/globocom/react-native-ua/blob/master/index.js#L68)**: Set tag to the user;
 - **[ReactNativeUA.remove_tag("tag")](https://github.com/globocom/react-native-ua/blob/master/index.js#L72)**: Remove added tag;
 - **[ReactNativeUA.on_notification((notification) => {})](https://github.com/globocom/react-native-ua/blob/master/index.js#L76)**: Add handler to handle all incoming notifications. **Attention:** this method need to be called on `componentWillMount()` of the component lifecycle.
@@ -204,6 +205,8 @@ class SampleApp extends Component {
         super(props);
 
         ReactNativeUA.enable_notification(); // prompt user to enable notification
+
+        ReactNativeUA.handle_background_notification(); // handle notifications when app is in background
     } 
 
     componentWillMount () {
