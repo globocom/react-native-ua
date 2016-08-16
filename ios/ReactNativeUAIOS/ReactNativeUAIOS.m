@@ -3,6 +3,7 @@
 #import "RCTBridge.h"
 #import "RCTEventDispatcher.h"
 #import "ReactNativeUAIOS.h"
+#import "UALocationService.h"
 
 
 @implementation ReactNativeUAIOS
@@ -103,6 +104,27 @@ RCT_EXPORT_METHOD(handleBackgroundNotification) {
                                                                                      @"data": notification}];
         
         [defaults removeObjectForKey:@"push_notification_opened_from_background"];
+    }
+}
+
+RCT_EXPORT_METHOD(enableGeolocation) {
+    if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined){
+        static CLLocationManager* lm = nil;
+        static dispatch_once_t once;
+        
+        dispatch_once(&once, ^ {
+            // Code to run once
+            lm = [[CLLocationManager alloc] init];
+        });
+        
+        [lm requestAlwaysAuthorization];
+        
+        [UAirship shared].locationService.requestAlwaysAuthorization = YES;
+        [UALocationService locationServicesEnabled];
+        [UALocationService locationServiceAuthorized];
+        [UALocationService airshipLocationServiceEnabled];
+        [UALocationService setAirshipLocationServiceEnabled:YES];
+        [UALocationService coreLocationWillPromptUserForPermissionToRun];
     }
 }
 
