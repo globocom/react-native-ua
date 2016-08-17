@@ -4,6 +4,9 @@
 #import "RCTEventDispatcher.h"
 #import "ReactNativeUAIOS.h"
 #import "UALocationService.h"
+#import "UAAction.h"
+#import "UAActionRegistry.h"
+#import "UAOpenExternalURLAction.h"
 
 
 @implementation ReactNativeUAIOS
@@ -28,6 +31,15 @@ static PushHandler *pushHandler = nil;
 
     pushHandler = [PushHandler new];
     [UAirship push].pushNotificationDelegate = pushHandler;
+
+        UAAction *urlAction = [UAAction actionWithBlock:^(UAActionArguments *args, UAActionCompletionHandler completionHandler) {
+        completionHandler([UAActionResult emptyResult]);
+    } acceptingArguments:^BOOL(UAActionArguments *args) {
+        return YES;
+    }];
+    
+    // Update the the deep link action in the registry with urlAction
+    [[UAirship shared].actionRegistry updateAction:urlAction forEntryWithName:kUAOpenExternalURLActionDefaultRegistryName];
 
     [[ReactNativeUAIOS getInstance] verifyLaunchOptions:launchOptions];
 }
@@ -128,49 +140,92 @@ RCT_EXPORT_METHOD(enableGeolocation) {
     }
 }
 
+RCT_EXPORT_METHOD(enableActionUrl) {
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"enable_action_url"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    BOOL isActionUrl = [[NSUserDefaults standardUserDefaults] boolForKey:@"enable_action_url"] ? YES : NO;
+    
+    NSLog(@"Habilitou o comportamento DEFAULT da action URL -> %@", isActionUrl ? @"YES": @"NO");
+}
+
+RCT_EXPORT_METHOD(disableActionUrl) {
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"enable_action_url"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    BOOL isActionUrl = [[NSUserDefaults standardUserDefaults] boolForKey:@"enable_action_url"] ? YES : NO;
+    
+    NSLog(@"Desabilitou o comportamento DEFAULT da action URL -> %@", isActionUrl ? @"YES": @"NO");
+}
+
 @end
 
 
 @implementation PushHandler
 
-- (void)receivedForegroundNotification:(NSDictionary *)notification fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"event": @"receivedForegroundNotification",
-                                                                                 @"data": notification}];
+- (BOOL)actionHandleNotification:(NSDictionary *)notification completionHandler:(void (^)())completionHandler {
+    BOOL isActionUrl = [[NSUserDefaults standardUserDefaults] boolForKey:@"enable_action_url"] ? YES : NO;
+    BOOL isUrl = [notification objectForKey:@"^u"] ? YES : NO;
+    
+    if (isActionUrl == YES && isUrl == YES) {
+        UAActionArguments * arguments = [UAActionArguments argumentsWithValue:[notification objectForKey:@"^u"] withSituation:UASituationManualInvocation];
+        
+        UAOpenExternalURLAction *urlAction = [[UAOpenExternalURLAction alloc] init];
+        
+        [urlAction performWithArguments:arguments completionHandler:completionHandler];
+        
+        return YES;
+    } else {
+        return NO;
+    }
+}
 
-    completionHandler(UIBackgroundFetchResultNoData);
+- (void)receivedForegroundNotification:(NSDictionary *)notification fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    if (![self actionHandleNotification:notification completionHandler:completionHandler]) {
+        [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"event": @"receivedForegroundNotification",
+                                                                                     @"data": notification}];
+        
+        completionHandler(UIBackgroundFetchResultNoData);
+    }
 }
 
 - (void)launchedFromNotification:(NSDictionary *)notification fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"event": @"launchedFromNotification",
+    if (![self actionHandleNotification:notification completionHandler:completionHandler]) {
+        [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"event": @"launchedFromNotification",
                                                                                  @"data": notification}];
 
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
-    [defaults setObject:notification forKey:@"push_notification_opened_from_background"];
-    [defaults synchronize];
+        [defaults setObject:notification forKey:@"push_notification_opened_from_background"];
+        [defaults synchronize];
 
-    completionHandler(UIBackgroundFetchResultNoData);
+        completionHandler(UIBackgroundFetchResultNoData);
+    }
 }
 
 - (void)launchedFromNotification:(NSDictionary *)notification actionIdentifier:(NSString *)identifier completionHandler:(void (^)())completionHandler {
-    [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"event": @"launchedFromNotificationActionButton",
-                                                                                 @"data": notification}];
-
-    completionHandler();
+    if (![self actionHandleNotification:notification completionHandler:completionHandler]) {
+        [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"event": @"launchedFromNotificationActionButton",
+                                                                                     @"data": notification}];
+        completionHandler();
+    }
 }
 
 - (void)receivedBackgroundNotification:(NSDictionary *)notification actionIdentifier:(NSString *)identifier completionHandler:(void (^)())completionHandler {
-    [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"event": @"receivedBackgroundNotificationActionButton",
-                                                                                 @"data": notification}];
+    if (![self actionHandleNotification:notification completionHandler:completionHandler]) {
+        [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"event": @"receivedBackgroundNotificationActionButton",
+                                                                                     @"data": notification}];
 
-    completionHandler();
+        completionHandler();
+    }
 }
 
 - (void)receivedBackgroundNotification:(NSDictionary *)notification fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"event": @"receivedBackgroundNotification",
-                                                                                 @"data": notification}];
-
-    completionHandler(UIBackgroundFetchResultNoData);
+    if (![self actionHandleNotification:notification completionHandler:completionHandler]) {
+        [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"event": @"receivedBackgroundNotification",
+                                                                                     @"data": notification}];
+        completionHandler(UIBackgroundFetchResultNoData);
+    }
 }
 
 @end
