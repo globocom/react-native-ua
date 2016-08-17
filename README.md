@@ -183,13 +183,15 @@ npm install react-native-ua --save
   - NSLocationWhenInUseUsageDescription: Urban Airship location service when app is in use
   
 ## Methods
-- **[ReactNativeUA.enable_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L60)**: Prompt user to enable notification receivement;
-- **[ReactNativeUA.disable_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L64)**: Prompt user to disable notification receivement;
-- **[ReactNativeUA.enable_geolocation()](https://github.com/globocom/react-native-ua/blob/master/index.js#L88)**: Prompt user to enable geolocation;
-- **[ReactNativeUA.handle_background_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L68)**: Handle notifications when app is in background;
-- **[ReactNativeUA.add_tag("tag")](https://github.com/globocom/react-native-ua/blob/master/index.js#L68)**: Set tag to the user;
-- **[ReactNativeUA.remove_tag("tag")](https://github.com/globocom/react-native-ua/blob/master/index.js#L72)**: Remove added tag;
-- **[ReactNativeUA.on_notification((notification) => {})](https://github.com/globocom/react-native-ua/blob/master/index.js#L76)**: Add handler to handle all incoming notifications. **Attention:** this method need to be called on `componentWillMount()` of the component lifecycle.
+- **[ReactNativeUA.enable_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L63)**: Prompt user to enable notification receivement;
+- **[ReactNativeUA.disable_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L67)**: Prompt user to disable notification receivement;
+- **[ReactNativeUA.enable_geolocation()](https://github.com/globocom/react-native-ua/blob/master/index.js#L71)**: Prompt user to enable geolocation;
+- **[ReactNativeUA.enable_action_url()](https://github.com/globocom/react-native-ua/blob/master/index.js#L75)**: Enable url action. The app will open the default browser with passed url;
+- **[ReactNativeUA.disable_action_url()](https://github.com/globocom/react-native-ua/blob/master/index.js#L79)**: Disable url action (Default). The notification handler will receive payload with a `url` property;
+- **[ReactNativeUA.handle_background_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L83)**: Handle notifications when app is in background;
+- **[ReactNativeUA.add_tag("tag")](https://github.com/globocom/react-native-ua/blob/master/index.js#L87)**: Set tag to the user;
+- **[ReactNativeUA.remove_tag("tag")](https://github.com/globocom/react-native-ua/blob/master/index.js#L91)**: Remove added tag;
+- **[ReactNativeUA.on_notification((notification) => {})](https://github.com/globocom/react-native-ua/blob/master/index.js#L99)**: Add handler to handle all incoming notifications. **Attention:** this method need to be called on `componentWillMount()` of the component lifecycle.
 
 ## Usage
 
@@ -214,6 +216,8 @@ class SampleApp extends Component {
 
         ReactNativeUA.enable_geolocation(); // prompt user to enable geolocation
 
+        ReactNativeUA.enable_action_url(); // Enable url action
+
         ReactNativeUA.handle_background_notification(); // handle notifications when app is in background
     } 
 
@@ -222,6 +226,7 @@ class SampleApp extends Component {
         // add handler to handle all incoming notifications
         ReactNativeUA.on_notification((notification) => {
             console.log('notification:',
+                        notification.url, // if action url is disabled
                         notification.platform,
                         notification.event,
                         notification.alert,

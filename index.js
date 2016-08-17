@@ -19,7 +19,8 @@ let call_notification_listeners = function (notification) {
             'platform': notification.platform,
             'event': notification.event,
             'alert': notification.alert,
-            'data': notification.data
+            'data': notification.data,
+            'url': notification.url
         });
     }
 }
@@ -33,7 +34,8 @@ switch (Platform.OS) {
                 'platform': 'ios',
                 'event': notification.event,
                 'alert': notification.data.aps.alert,
-                'data': notification.data
+                'data': notification.data,
+                'url': notification.data['^u'] || false
             });
         });
 
@@ -47,7 +49,8 @@ switch (Platform.OS) {
                 'platform': 'android',
                 'event': notification.event,
                 'alert': notification['com.urbanairship.push.ALERT'],
-                'data': notification
+                'data': notification.data,
+                'url': false
             });
         });
 
@@ -63,6 +66,18 @@ class ReactNativeUA {
 
     static disable_notification () {
         bridge.disableNotification();
+    }
+
+    static enable_geolocation () {
+        bridge.enableGeolocation();
+    }
+
+    static enable_action_url () {
+        bridge.enableActionUrl();
+    }
+
+    static disable_action_url () {
+        bridge.disableActionUrl();
     }
 
     static handle_background_notification () {
@@ -83,10 +98,6 @@ class ReactNativeUA {
 
     static on_notification (callback) {
         notification_listeners.push(callback);
-    }
-
-    static enable_geolocation () {
-        bridge.enableGeolocation();
     }
 
 }
