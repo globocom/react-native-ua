@@ -191,6 +191,7 @@ npm install react-native-ua --save
 - **[ReactNativeUA.handle_background_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L83)**: Handle notifications when app is in background;
 - **[ReactNativeUA.add_tag("tag")](https://github.com/globocom/react-native-ua/blob/master/index.js#L87)**: Set tag to the user;
 - **[ReactNativeUA.remove_tag("tag")](https://github.com/globocom/react-native-ua/blob/master/index.js#L91)**: Remove added tag;
+- **[ReactNativeUA.set_named_user_id("nameUserId")](https://github.com/globocom/react-native-ua/blob/master/index.js#L95)**: Set named user id;
 - **[ReactNativeUA.on_notification((notification) => {})](https://github.com/globocom/react-native-ua/blob/master/index.js#L99)**: Add handler to handle all incoming notifications. **Attention:** this method need to be called on `componentWillMount()` of the component lifecycle.
 
 ## Usage
@@ -209,20 +210,19 @@ import ReactNativeUA from 'react-native-ua'; // import module
 
 class SampleApp extends Component {
 
-    constructor (props) {
-        super(props);
-
+    render () {
         ReactNativeUA.enable_notification(); // prompt user to enable notification
 
         ReactNativeUA.enable_geolocation(); // prompt user to enable geolocation
 
-        ReactNativeUA.enable_action_url(); // Enable url action
+        ReactNativeUA.enable_action_url(); // enable url action
 
         ReactNativeUA.handle_background_notification(); // handle notifications when app is in background
-    } 
 
-    componentWillMount () {
-    
+        ReactNativeUA.add_tag('tag'); // set tag to the user
+
+        ReactNativeUA.set_named_user_id('user_id'); // set named user id
+
         // add handler to handle all incoming notifications
         ReactNativeUA.on_notification((notification) => {
             console.log('notification:',
@@ -234,9 +234,7 @@ class SampleApp extends Component {
 
             alert(notification.alert);
         });
-    }
 
-    render () { 
         return (
             <View>
                 <Text>ReactNativeUA</Text>

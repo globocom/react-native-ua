@@ -92,7 +92,7 @@ class ReactNativeUA {
         bridge.removeTag(tag);
     }
 
-    static setNamedUserId (nameUserId) {
+    static set_named_user_id (nameUserId) {
         bridge.setNamedUserId(nameUserId);
     }
 
