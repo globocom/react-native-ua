@@ -30,7 +30,7 @@ switch (Platform.OS) {
         bridge = ReactNativeUAIOS;
 
         NativeAppEventEmitter.addListener('receivedNotification', (notification) => {
-            var action_url = notification.data['^u'];
+            var action_url = notification.data['^u'] || false;
 
             call_notification_listeners({
                 'platform': 'ios',
@@ -47,9 +47,9 @@ switch (Platform.OS) {
         bridge = ReactNativeUAAndroid;
 
         DeviceEventEmitter.addListener('receivedNotification', (notification) => {
-            var actions_json = notification['com.urbanairship.actions'];
-            var actions = JSON.parse(actions_json) || null;
-            var action_url = actions['^u'] || false;
+            var actions_json = notification['com.urbanairship.actions'] || false;
+            var actions = actions_json ? JSON.parse(actions_json) : false;
+            var action_url = actions ? actions['^u'] || false : false;
 
             call_notification_listeners({
                 'platform': 'android',
