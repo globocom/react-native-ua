@@ -1,6 +1,8 @@
 package com.globo.reactnativeua;
 
+import android.app.Activity;
 import android.app.Application;
+import android.util.Log;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -50,6 +52,34 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void handleBackgroundNotification() {
-        ReactNativeUAReceiverHelper.setup(getCurrentActivity().getApplicationContext()).sendPushIntent();
+        Activity activity = getCurrentActivity();
+
+        if (activity != null) ReactNativeUAReceiverHelper.setup(getCurrentActivity().getApplicationContext()).sendPushIntent();
+    }
+
+    @ReactMethod
+    public void enableActionUrl() {
+        Activity activity = getCurrentActivity();
+
+        if (activity != null) {
+            ReactNativeUAReceiverHelper.setup(getCurrentActivity().getApplicationContext()).setActionUrl(true);
+
+            Log.d("ActionUrl", "Enable default action url behaviour -> True");
+        }
+    }
+
+    @ReactMethod
+    public void disableActionUrl() {
+        Activity activity = getCurrentActivity();
+
+        if (activity != null) {
+            ReactNativeUAReceiverHelper.setup(getCurrentActivity().getApplicationContext()).setActionUrl(false);
+
+            Log.d("ActionUrl", "Disable default action url behaviour -> False");
+        }
+    }
+
+    @ReactMethod
+    public void enableGeolocation() {
     }
 }
