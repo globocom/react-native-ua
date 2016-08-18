@@ -30,12 +30,14 @@ switch (Platform.OS) {
         bridge = ReactNativeUAIOS;
 
         NativeAppEventEmitter.addListener('receivedNotification', (notification) => {
+            var action_url = notification.data['^u'];
+
             call_notification_listeners({
                 'platform': 'ios',
                 'event': notification.event,
                 'alert': notification.data.aps.alert,
                 'data': notification.data,
-                'url': notification.data['^u'] || false
+                'url': action_url
             });
         });
 
@@ -45,12 +47,16 @@ switch (Platform.OS) {
         bridge = ReactNativeUAAndroid;
 
         DeviceEventEmitter.addListener('receivedNotification', (notification) => {
+            var actions_json = notification['com.urbanairship.actions'];
+            var actions = JSON.parse(actions_json) || null;
+            var action_url = actions['^u'] || false;
+
             call_notification_listeners({
                 'platform': 'android',
                 'event': notification.event,
                 'alert': notification['com.urbanairship.push.ALERT'],
                 'data': notification,
-                'url': JSON.parse(notification['com.urbanairship.actions'])['^u'] || false
+                'url': action_url
             });
         });
 
