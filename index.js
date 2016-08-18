@@ -49,8 +49,8 @@ switch (Platform.OS) {
                 'platform': 'android',
                 'event': notification.event,
                 'alert': notification['com.urbanairship.push.ALERT'],
-                'data': notification.data,
-                'url': false
+                'data': notification,
+                'url': JSON.parse(notification['com.urbanairship.actions'])['^u'] || false
             });
         });
 

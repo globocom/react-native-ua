@@ -7,6 +7,9 @@ import android.support.annotation.NonNull;
 
 import com.urbanairship.AirshipReceiver;
 import com.urbanairship.push.PushMessage;
+import com.urbanairship.actions.Action;
+import com.urbanairship.actions.ActionRunRequest;
+import com.urbanairship.actions.OpenExternalUrlAction;
 
 import java.util.List;
 
@@ -18,6 +21,12 @@ public class ReactNativeUAReceiver extends AirshipReceiver {
         boolean isRunning = isApplicationRunning(context);
 
         if (isRunning && ReactNativeUAEventEmitter.getInstance() != null) {
+
+            if (message.getActions().get("^u") != null && ReactNativeUAReceiverHelper.setup(context).isActionUrl()) {
+                ActionRunRequest.createRequest(new OpenExternalUrlAction()).setSituation(Action.SITUATION_MANUAL_INVOCATION).setValue(message.getActions().get("^u")).run();
+                return;
+            }
+
             ReactNativeUAEventEmitter.getInstance().sendEvent("onNotificationOpened", message);
         }
     }
