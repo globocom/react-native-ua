@@ -95,21 +95,23 @@ npm install react-native-ua --save
   productionAppSecret = Your Production Secret
   ```
 
-4. Inside `MainActivity.java`, located at `android/app/src/main/java/your/app/domain`, add the `ReactNativeUAPackage` to your app package list:
+4. Inside `MainApplication.java`, located at `android/app/src/main/java/your/app/domain`, add the `ReactNativeUAPackage` to your app package list:
 
   ```java
   // ...
 
   import com.globo.reactnativeua.ReactNativeUAPackage; // import react-native-ua package
 
-  public class MainActivity extends ReactActivity {
+  public class MainApplication extends Application implements ReactApplication {
       // ...
-
+      
+      public final Application application = this; // get application
+      
       @Override
       protected List<ReactPackage> getPackages() {
           return Arrays.<ReactPackage>asList(
               // ...
-              new ReactNativeUAPackage(this.getApplication()) // add react-native-ua package
+              new ReactNativeUAPackage(application) // set react-native-ua package using application
           );
       }
   }
