@@ -104,9 +104,9 @@ npm install react-native-ua --save
 
   public class MainApplication extends Application implements ReactApplication {
       // ...
-      
+
       public final Application application = this; // get application
-      
+
       @Override
       protected List<ReactPackage> getPackages() {
           return Arrays.<ReactPackage>asList(
@@ -183,7 +183,7 @@ npm install react-native-ua --save
 
   - NSLocationAlwaysUsageDescription: Urban Airship location service
   - NSLocationWhenInUseUsageDescription: Urban Airship location service when app is in use
-  
+
 ## Methods
 - **[ReactNativeUA.enable_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L63)**: Prompt user to enable notification receivement;
 - **[ReactNativeUA.disable_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L67)**: Prompt user to disable notification receivement;
@@ -212,19 +212,23 @@ import ReactNativeUA from 'react-native-ua'; // import module
 
 class SampleApp extends Component {
 
-    render () {
-        ReactNativeUA.enable_notification(); // prompt user to enable notification
+    constructor(props) {
+      super(props);
 
-        ReactNativeUA.enable_geolocation(); // prompt user to enable geolocation
+      ReactNativeUA.enable_notification(); // prompt user to enable notification
 
-        ReactNativeUA.enable_action_url(); // enable url action
+      ReactNativeUA.enable_geolocation(); // prompt user to enable geolocation
 
-        ReactNativeUA.handle_background_notification(); // handle notifications when app is in background
+      ReactNativeUA.enable_action_url(); // enable url action
 
-        ReactNativeUA.add_tag('tag'); // set tag to the user
+      ReactNativeUA.handle_background_notification(); // handle notifications when app is in background
 
-        ReactNativeUA.set_named_user_id('user_id'); // set named user id
+      ReactNativeUA.add_tag('tag'); // set tag to the user
 
+      ReactNativeUA.set_named_user_id('user_id'); // set named user id
+    }
+
+    componentWillMount() {
         // add handler to handle all incoming notifications
         ReactNativeUA.on_notification((notification) => {
             console.log('notification:',
@@ -236,7 +240,9 @@ class SampleApp extends Component {
 
             alert(notification.alert);
         });
+    }
 
+    render () {
         return (
             <View>
                 <Text>ReactNativeUA</Text>
