@@ -3,6 +3,7 @@ package com.globo.reactnativeua;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import com.urbanairship.AirshipReceiver;
@@ -27,7 +28,9 @@ public class ReactNativeUAReceiver extends AirshipReceiver {
                 return;
             }
 
-            ReactNativeUAEventEmitter.getInstance().sendEvent("onNotificationOpened", message);
+            String event = message.getPushBundle().getString("Event", "onNotificationReceived");
+
+            ReactNativeUAEventEmitter.getInstance().sendEvent(event, message);
         }
     }
 
@@ -35,8 +38,12 @@ public class ReactNativeUAReceiver extends AirshipReceiver {
     protected boolean onNotificationOpened(@NonNull Context context, @NonNull NotificationInfo notificationInfo) {
         Intent intent = new Intent();
 
+        Bundle push = notificationInfo.getMessage().getPushBundle();
+
+        push.putString("Event", "onNotificationOpened");
+
         intent.setAction("com.urbanairship.push.RECEIVED");
-        intent.putExtra("com.urbanairship.push.EXTRA_PUSH_MESSAGE_BUNDLE", notificationInfo.getMessage().getPushBundle());
+        intent.putExtra("com.urbanairship.push.EXTRA_PUSH_MESSAGE_BUNDLE", push);
 
         if (ReactNativeUAEventEmitter.getInstance() == null) ReactNativeUAReceiverHelper.setup(context).savePushIntent(intent);
         else context.sendBroadcast(intent);
