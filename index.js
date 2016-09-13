@@ -106,6 +106,14 @@ class ReactNativeUA {
         notification_listeners.push(callback);
     }
 
+    static set_icon (iconName) {
+        bridge.setIcon(iconName);
+    }
+
+    static set_large_icon (iconName) {
+        bridge.setLargeIcon(iconName);
+    }
+
 }
 
 export default ReactNativeUA

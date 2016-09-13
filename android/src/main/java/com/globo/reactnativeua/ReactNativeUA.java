@@ -27,10 +27,7 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
 
     public ReactNativeUA(final ReactApplicationContext reactContext) {
         super(reactContext);
-
         Autopilot.automaticTakeOff(getReactApplicationContext());
-
-        setIcon("ic_notification");
     }
 
     @Override
