@@ -34,9 +34,11 @@ public class ReactNativeUAEventEmitter {
     }
 
     public void sendEvent(String eventName, PushMessage message) {
-        this.context
-                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                .emit("receivedNotification", this.createReactNativeMessageObject(eventName, message));
+        if (this.context.hasActiveCatalystInstance()) {
+            this.context
+                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                    .emit("receivedNotification", this.createReactNativeMessageObject(eventName, message));
+        }
     }
 
     public static void setup(ReactContext reactContext) {
