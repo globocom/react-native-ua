@@ -151,7 +151,7 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setIcon(String iconName) {
+    public void setAndroidSmallIcon(String iconName) {
         int iconId = getImageResourceId(iconName);
         if (iconId > 0) {
             DefaultNotificationFactory defaultNotifFactory = getDefaultNotificationFactory();
@@ -161,7 +161,7 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setLargeIcon(String iconName) {
+    public void setAndroidLargeIcon(String iconName) {
         int iconId = getImageResourceId(iconName);
         if (iconId > 0) {
             DefaultNotificationFactory defaultNotifFactory = getDefaultNotificationFactory();

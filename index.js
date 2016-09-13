@@ -106,12 +106,12 @@ class ReactNativeUA {
         notification_listeners.push(callback);
     }
 
-    static set_icon (iconName) {
-        bridge.setIcon(iconName);
+    static set_android_small_icon (iconName) {
+        bridge.setAndroidSmallIcon(iconName);
     }
 
-    static set_large_icon (iconName) {
-        bridge.setLargeIcon(iconName);
+    static set_android_large_icon (iconName) {
+        bridge.setAndroidLargeIcon(iconName);
     }
 
 }
