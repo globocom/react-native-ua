@@ -82,28 +82,19 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void handleBackgroundNotification() {
-        Activity activity = getCurrentActivity();
-        if (activity != null) {
-            ReactNativeUAReceiverHelper.setup(getCurrentActivity().getApplicationContext()).sendPushIntent();
-        }
+        ReactNativeUAReceiverHelper.setup(getReactApplicationContext()).sendPushIntent();
     }
 
     @ReactMethod
     public void enableActionUrl() {
-        Activity activity = getCurrentActivity();
-        if (activity != null) {
-            ReactNativeUAReceiverHelper.setup(getCurrentActivity().getApplicationContext()).setActionUrl(true);
-            Log.d("ActionUrl", "Enable default action url behaviour -> True");
-        }
+        ReactNativeUAReceiverHelper.setup(getReactApplicationContext()).setActionUrl(true);
+        Log.d("ActionUrl", "Enable default action url behaviour -> True");
     }
 
     @ReactMethod
     public void disableActionUrl() {
-        Activity activity = getCurrentActivity();
-        if (activity != null) {
-            ReactNativeUAReceiverHelper.setup(getCurrentActivity().getApplicationContext()).setActionUrl(false);
-            Log.d("ActionUrl", "Disable default action url behaviour -> False");
-        }
+        ReactNativeUAReceiverHelper.setup(getReactApplicationContext()).setActionUrl(false);
+        Log.d("ActionUrl", "Disable default action url behaviour -> False");
     }
 
     @ReactMethod
@@ -154,6 +145,7 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
     public void setAndroidSmallIcon(String iconName) {
         int iconId = getImageResourceId(iconName);
         if (iconId > 0) {
+            Preferences.getInstance().setAndroidSmallIconResourceId(iconId);
             DefaultNotificationFactory defaultNotifFactory = getDefaultNotificationFactory();
             defaultNotifFactory.setSmallIconId(iconId);
             UAirship.shared().getPushManager().setNotificationFactory(defaultNotifFactory);
@@ -164,6 +156,7 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
     public void setAndroidLargeIcon(String iconName) {
         int iconId = getImageResourceId(iconName);
         if (iconId > 0) {
+            Preferences.getInstance().setAndroidLargeIconResourceId(iconId);
             DefaultNotificationFactory defaultNotifFactory = getDefaultNotificationFactory();
             defaultNotifFactory.setLargeIcon(iconId);
             UAirship.shared().getPushManager().setNotificationFactory(defaultNotifFactory);
@@ -175,7 +168,7 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
         if (notifFactory instanceof DefaultNotificationFactory) {
             return (DefaultNotificationFactory) notifFactory;
         }
-        return new DefaultNotificationFactory(getReactApplicationContext());
+        return new DefaultNotificationFactory(UAirship.getApplicationContext());
     }
 
     private int getImageResourceId(String imageName) {
