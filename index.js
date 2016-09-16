@@ -106,6 +106,18 @@ class ReactNativeUA {
         notification_listeners.push(callback);
     }
 
+    static set_android_small_icon(iconName) {
+        if (Platform.OS === 'android') {
+            bridge.setAndroidSmallIcon(iconName);
+        }
+    }
+
+    static set_android_large_icon (iconName) {
+        if (Platform.OS === 'android') {
+            bridge.setAndroidLargeIcon(iconName);
+        }
+    }
+
 }
 
 export default ReactNativeUA
