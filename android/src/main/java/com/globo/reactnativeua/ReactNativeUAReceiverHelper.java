@@ -4,17 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import com.facebook.react.bridge.LifecycleEventListener;
 
-public class ReactNativeUAReceiverHelper {
+
+public class ReactNativeUAReceiverHelper implements LifecycleEventListener{
 
     private static ReactNativeUAReceiverHelper INSTANCE = null;
 
     private Context context;
     private Intent pushIntent;
 
-    private ReactNativeUAReceiverHelper(Context context) {
-        this.context = context;
-    }
+    private ReactNativeUAReceiverHelper(Context context) { this.context = context; }
 
     public void savePushIntent(Intent intent) { this.pushIntent = intent; }
 
@@ -44,5 +44,18 @@ public class ReactNativeUAReceiverHelper {
         }
 
         return ReactNativeUAReceiverHelper.INSTANCE;
+    }
+
+    @Override
+    public void onHostResume() {
+        sendPushIntent();
+    }
+
+    @Override
+    public void onHostPause() {
+    }
+
+    @Override
+    public void onHostDestroy() {
     }
 }

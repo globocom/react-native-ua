@@ -21,6 +21,8 @@ public class ReactNativeUAEventEmitter {
 
     private ReactNativeUAEventEmitter(ReactContext reactContext) {
         this.context = reactContext;
+
+        this.context.addLifecycleEventListener(ReactNativeUAReceiverHelper.setup(context));
     }
 
     private ReadableMap createReactNativeMessageObject(CharSequence eventName, PushMessage message) {
@@ -34,9 +36,11 @@ public class ReactNativeUAEventEmitter {
     }
 
     public void sendEvent(String eventName, PushMessage message) {
-        this.context
-                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                .emit("receivedNotification", this.createReactNativeMessageObject(eventName, message));
+        if (this.context.hasActiveCatalystInstance() && this.context.getCurrentActivity() != null) {
+                this.context
+                        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                        .emit("receivedNotification", this.createReactNativeMessageObject(eventName, message));
+        }
     }
 
     public static void setup(ReactContext reactContext) {
