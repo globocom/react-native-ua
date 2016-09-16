@@ -144,7 +144,7 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setAndroidSmallIcon(String iconName) {
         int iconId = getImageResourceId(iconName);
-        if (iconId > 0) {
+        if (iconId != 0) {
             Preferences.getInstance().setAndroidSmallIconResourceId(iconId);
             DefaultNotificationFactory defaultNotifFactory = getDefaultNotificationFactory();
             defaultNotifFactory.setSmallIconId(iconId);
@@ -155,7 +155,7 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setAndroidLargeIcon(String iconName) {
         int iconId = getImageResourceId(iconName);
-        if (iconId > 0) {
+        if (iconId != 0) {
             Preferences.getInstance().setAndroidLargeIconResourceId(iconId);
             DefaultNotificationFactory defaultNotifFactory = getDefaultNotificationFactory();
             defaultNotifFactory.setLargeIcon(iconId);
@@ -176,7 +176,7 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
             return -1;
         }
         int imageId = getImageResourceId(imageName, "drawable");
-        if (imageId <= 0) {
+        if (imageId == 0) {
             imageId = getImageResourceId(imageName, "mipmap");
         }
         return imageId;

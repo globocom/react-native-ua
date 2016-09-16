@@ -21,11 +21,11 @@ public class ReactNativeUAAutoPilot extends Autopilot {
         // Customize icons
         DefaultNotificationFactory defaultNotifFactory = getDefaultNotificationFactory();
         int smallIconResourceId = Preferences.getInstance().getAndroidSmallIconResourceId();
-        if (smallIconResourceId > 0) {
+        if (smallIconResourceId != 0) {
             defaultNotifFactory.setSmallIconId(smallIconResourceId);
         }
         int largeIconResourceId = Preferences.getInstance().getAndroidLargeIconResourceId();
-        if (largeIconResourceId > 0) {
+        if (largeIconResourceId != 0) {
             defaultNotifFactory.setLargeIcon(largeIconResourceId);
         }
         UAirship.shared().getPushManager().setNotificationFactory(defaultNotifFactory);
