@@ -3,6 +3,7 @@ package com.globo.reactnativeua;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
@@ -45,10 +46,27 @@ public class ReactNativeUAReceiver extends AirshipReceiver {
         intent.setAction("com.urbanairship.push.RECEIVED");
         intent.putExtra("com.urbanairship.push.EXTRA_PUSH_MESSAGE_BUNDLE", push);
 
-        if (ReactNativeUAEventEmitter.getInstance() == null) ReactNativeUAReceiverHelper.setup(context).savePushIntent(intent);
-        else context.sendBroadcast(intent);
+        boolean shouldSendBroadcast = isApplicationInForeground(context);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            shouldSendBroadcast = isApplicationRunning(context);
+
+        if (!shouldSendBroadcast || ReactNativeUAEventEmitter.getInstance() == null)
+            ReactNativeUAReceiverHelper.setup(context).savePushIntent(intent);
+        else
+            context.sendBroadcast(intent);
 
         return false;
+    }
+
+    private boolean isApplicationInForeground(Context context) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+
+        List<ActivityManager.RunningAppProcessInfo> task = manager.getRunningAppProcesses();
+
+        String packageName = task.get(0).pkgList[0];
+
+        return packageName.equals(context.getPackageName());
     }
 
     private boolean isApplicationRunning(Context context) {
