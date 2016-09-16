@@ -21,6 +21,8 @@ public class ReactNativeUAEventEmitter {
 
     private ReactNativeUAEventEmitter(ReactContext reactContext) {
         this.context = reactContext;
+
+        this.context.addLifecycleEventListener(ReactNativeUAReceiverHelper.setup(context));
     }
 
     private ReadableMap createReactNativeMessageObject(CharSequence eventName, PushMessage message) {
