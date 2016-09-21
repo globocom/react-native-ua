@@ -36,7 +36,7 @@ public class ReactNativeUAEventEmitter {
     }
 
     public void sendEvent(String eventName, PushMessage message) {
-        if (this.context.hasActiveCatalystInstance() && this.context.getCurrentActivity() != null) {
+        if (this.context.hasActiveCatalystInstance() && this.context.hasCurrentActivity()) {
                 this.context
                         .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                         .emit("receivedNotification", this.createReactNativeMessageObject(eventName, message));
