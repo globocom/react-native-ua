@@ -34,6 +34,11 @@
 @property(nonatomic, strong) UIColor *navigationBarColor;
 
 /**
+ * Whether the navigation bar should be translucent.
+ */
+@property(nonatomic, assign) BOOL navigationBarOpaque;
+
+/**
  * The background color of the message list.
  */
 @property(nonatomic, strong) UIColor *listColor;
@@ -99,6 +104,16 @@
 @property(nonatomic, strong) UIColor *cellSeparatorColor;
 
 /**
+ * The message cell tint color.
+ */
+@property(nonatomic, strong) UIColor *cellTintColor;
+
+/**
+ * The background color for the unread indicator.
+ */
+@property(nonatomic, strong) UIColor *unreadIndicatorColor;
+
+/**
  * Factory method to create a UADefaultMessageCenterStyle.
  */
 + (instancetype)style;
@@ -107,7 +122,6 @@
  * Factory method to create UADefaultMessageCenterStyle from a provided plist.
  */
 + (instancetype)styleWithContentsOfFile:(NSString *)path;
-
 
 
 @end

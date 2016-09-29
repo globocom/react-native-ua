@@ -3,7 +3,7 @@
 #import "RCTBridge.h"
 #import "RCTEventDispatcher.h"
 #import "ReactNativeUAIOS.h"
-#import "UALocationService.h"
+#import "UALocation.h"
 #import "UAAction.h"
 #import "UAActionRegistry.h"
 #import "UAOpenExternalURLAction.h"
@@ -102,7 +102,7 @@ RCT_EXPORT_METHOD(removeTag:(NSString *)tag) {
 }
 
 RCT_EXPORT_METHOD(setNamedUserId:(NSString *)nameUserId) {
-    [UAirship push].namedUser.identifier = nameUserId;
+    [UAirship namedUser].identifier = nameUserId;
 }
 
 RCT_EXPORT_METHOD(handleBackgroundNotification) {
@@ -131,12 +131,10 @@ RCT_EXPORT_METHOD(enableGeolocation) {
         
         [lm requestAlwaysAuthorization];
         
-        [UAirship shared].locationService.requestAlwaysAuthorization = YES;
-        [UALocationService locationServicesEnabled];
-        [UALocationService locationServiceAuthorized];
-        [UALocationService airshipLocationServiceEnabled];
-        [UALocationService setAirshipLocationServiceEnabled:YES];
-        [UALocationService coreLocationWillPromptUserForPermissionToRun];
+        [UAirship location].locationUpdatesEnabled = YES;
+        [UAirship location].autoRequestAuthorizationEnabled = YES;
+        [UAirship location].backgroundLocationUpdatesAllowed = YES;
+        
     }
 }
 
