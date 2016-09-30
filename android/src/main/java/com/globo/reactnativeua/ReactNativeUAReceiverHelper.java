@@ -2,7 +2,6 @@ package com.globo.reactnativeua;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 
 import com.facebook.react.bridge.LifecycleEventListener;
 
@@ -33,22 +32,6 @@ public class ReactNativeUAReceiverHelper implements LifecycleEventListener {
             context.sendBroadcast(pushIntent);
             pushIntent = null;
         }
-    }
-
-    public boolean isActionUrl() {
-        SharedPreferences preferences = context.getSharedPreferences(
-                "enable_action_url",
-                Context.MODE_PRIVATE);
-        return preferences.getBoolean("isActionUrl", false);
-    }
-
-    public void setActionUrl(boolean isEnable) {
-        SharedPreferences preferences = context.getSharedPreferences(
-                "enable_action_url",
-                Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("isActionUrl", isEnable);
-        editor.apply();
     }
 
     @Override

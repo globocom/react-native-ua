@@ -24,15 +24,13 @@ public class ReactNativeUAReceiver extends AirshipReceiver {
         boolean isRunning = isApplicationRunning(context);
 
         if (isRunning && ReactNativeUAEventEmitter.getInstance() != null) {
-
             if (message.getActions().get("^u") != null
-                    && ReactNativeUAReceiverHelper.getInstance(context).isActionUrl()) {
+                    && PreferencesManager.getInstance().isEnabledActionUrl()) {
                 ActionRunRequest.createRequest(new OpenExternalUrlAction())
                         .setSituation(Action.SITUATION_MANUAL_INVOCATION)
                         .setValue(message.getActions().get("^u")).run();
                 return;
             }
-
             String event = message.getPushBundle().getString("Event", "onNotificationReceived");
             ReactNativeUAEventEmitter.getInstance().sendEvent(event, message);
         }
@@ -78,12 +76,11 @@ public class ReactNativeUAReceiver extends AirshipReceiver {
         List<ActivityManager.RunningAppProcessInfo> processInfos = activityManager.getRunningAppProcesses();
         
         for (ActivityManager.RunningAppProcessInfo processInfo : processInfos) {
-            if (processInfo.processName.equals(context.getPackageName())) {
-                if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
-                    for (String d: processInfo.pkgList) {
-                        return true;
-                    }
-                }
+            if (processInfo.processName.equals(context.getPackageName())
+                    && processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
+                    && processInfo.pkgList != null
+                    && processInfo.pkgList.length > 0) {
+                    return true;
             }
         }
 

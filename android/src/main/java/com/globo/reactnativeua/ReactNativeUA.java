@@ -86,13 +86,13 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void enableActionUrl() {
-        ReactNativeUAReceiverHelper.getInstance(getReactApplicationContext()).setActionUrl(true);
+        PreferencesManager.getInstance().setEnabledActionUrl(true);
         Log.d("ActionUrl", "Enable default action url behaviour -> True");
     }
 
     @ReactMethod
     public void disableActionUrl() {
-        ReactNativeUAReceiverHelper.getInstance(getReactApplicationContext()).setActionUrl(false);
+        PreferencesManager.getInstance().setEnabledActionUrl(false);
         Log.d("ActionUrl", "Disable default action url behaviour -> False");
     }
 
@@ -144,7 +144,7 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
     public void setAndroidSmallIcon(String iconName) {
         int iconId = getImageResourceId(iconName);
         if (iconId != 0) {
-            Preferences.getInstance().setAndroidSmallIconResourceId(iconId);
+            PreferencesManager.getInstance().setAndroidSmallIconResourceId(iconId);
             DefaultNotificationFactory defaultNotifFactory = getDefaultNotificationFactory();
             defaultNotifFactory.setSmallIconId(iconId);
             UAirship.shared().getPushManager().setNotificationFactory(defaultNotifFactory);
@@ -155,7 +155,7 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
     public void setAndroidLargeIcon(String iconName) {
         int iconId = getImageResourceId(iconName);
         if (iconId != 0) {
-            Preferences.getInstance().setAndroidLargeIconResourceId(iconId);
+            PreferencesManager.getInstance().setAndroidLargeIconResourceId(iconId);
             DefaultNotificationFactory defaultNotifFactory = getDefaultNotificationFactory();
             defaultNotifFactory.setLargeIcon(iconId);
             UAirship.shared().getPushManager().setNotificationFactory(defaultNotifFactory);
