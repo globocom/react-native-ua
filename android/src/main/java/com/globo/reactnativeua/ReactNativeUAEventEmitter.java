@@ -7,7 +7,6 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
-
 import com.urbanairship.push.PushMessage;
 
 
@@ -21,8 +20,7 @@ public class ReactNativeUAEventEmitter {
 
     private ReactNativeUAEventEmitter(ReactContext reactContext) {
         this.context = reactContext;
-
-        this.context.addLifecycleEventListener(ReactNativeUAReceiverHelper.setup(context));
+        this.context.addLifecycleEventListener(ReactNativeUAReceiverHelper.getInstance(context));
     }
 
     private ReadableMap createReactNativeMessageObject(CharSequence eventName, PushMessage message) {
@@ -30,16 +28,15 @@ public class ReactNativeUAEventEmitter {
 
         messageBundle.putCharSequence("event", eventName);
 
-        ReadableMap messageObject = Arguments.fromBundle(messageBundle);
-
-        return messageObject;
+        return Arguments.fromBundle(messageBundle);
     }
 
     public void sendEvent(String eventName, PushMessage message) {
-        if (this.context.hasActiveCatalystInstance() && this.context.hasCurrentActivity()) {
-                this.context
-                        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                        .emit("receivedNotification", this.createReactNativeMessageObject(eventName, message));
+        if (context.hasActiveCatalystInstance() && this.context.hasCurrentActivity()) {
+                context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(
+                        "receivedNotification",
+                        createReactNativeMessageObject(eventName, message)
+                );
         }
     }
 
@@ -48,7 +45,6 @@ public class ReactNativeUAEventEmitter {
             ReactNativeUAEventEmitter.INSTANCE = new ReactNativeUAEventEmitter(reactContext);
         } else {
             Log.w(TAG, "Event Emitter initialized more than once");
-
             if (ReactNativeUAEventEmitter.INSTANCE.context.getCatalystInstance().isDestroyed()) {
                 ReactNativeUAEventEmitter.INSTANCE = new ReactNativeUAEventEmitter(reactContext);
             }

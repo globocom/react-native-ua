@@ -1,7 +1,6 @@
 package com.globo.reactnativeua;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -82,63 +81,63 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void handleBackgroundNotification() {
-        ReactNativeUAReceiverHelper.setup(getReactApplicationContext()).sendPushIntent();
+        ReactNativeUAReceiverHelper.getInstance(getReactApplicationContext()).sendPushIntent();
     }
 
     @ReactMethod
     public void enableActionUrl() {
-        ReactNativeUAReceiverHelper.setup(getReactApplicationContext()).setActionUrl(true);
+        ReactNativeUAReceiverHelper.getInstance(getReactApplicationContext()).setActionUrl(true);
         Log.d("ActionUrl", "Enable default action url behaviour -> True");
     }
 
     @ReactMethod
     public void disableActionUrl() {
-        ReactNativeUAReceiverHelper.setup(getReactApplicationContext()).setActionUrl(false);
+        ReactNativeUAReceiverHelper.getInstance(getReactApplicationContext()).setActionUrl(false);
         Log.d("ActionUrl", "Disable default action url behaviour -> False");
     }
 
     @ReactMethod
     public void enableGeolocation() {
-        final Activity activity = getCurrentActivity();
-
-        if (activity != null) {
-            if (shouldRequestPermissions(activity)) {
-                ActionRunRequest.createRequest(new Action() {
-                    @NonNull
-                    @Override
-                    public ActionResult perform(ActionArguments arguments) {
-                        int[] result = requestPermissions(Manifest.permission.ACCESS_COARSE_LOCATION,
-                                Manifest.permission.ACCESS_FINE_LOCATION);
-
-                        for (int i = 0; i < result.length; i++) {
-                            if (result[i] == PackageManager.PERMISSION_GRANTED) {
-                                return ActionResult.newResult(ActionValue.wrap(true));
-                            }
-                        }
-                        return ActionResult.newResult(ActionValue.wrap(false));
-                    }
-                }).run(new ActionCompletionCallback() {
-                    @Override
-                    public void onFinish(ActionArguments arguments, ActionResult result) {
-                        if (result.getValue().getBoolean(false)) {
-                            UAirship.shared().getLocationManager().setLocationUpdatesEnabled(true);
+        if (shouldRequestPermissions()) {
+            ActionRunRequest.createRequest(new Action() {
+                @NonNull
+                @Override
+                public ActionResult perform(ActionArguments arguments) {
+                    int[] result = requestPermissions(Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION);
+                    for (int i = 0; i < result.length; i++) {
+                        if (result[i] == PackageManager.PERMISSION_GRANTED) {
+                            return ActionResult.newResult(ActionValue.wrap(true));
                         }
                     }
-                });
+                    return ActionResult.newResult(ActionValue.wrap(false));
+                }
+            }).run(new ActionCompletionCallback() {
+                @Override
+                public void onFinish(ActionArguments arguments, ActionResult result) {
+                    if (result.getValue().getBoolean(false)) {
+                        UAirship.shared().getLocationManager().setLocationUpdatesEnabled(true);
+                    }
+                }
+            });
 
-            } else {
-                UAirship.shared().getLocationManager().setLocationUpdatesEnabled(true);
-            }
+        } else {
+            UAirship.shared().getLocationManager().setLocationUpdatesEnabled(true);
         }
     }
 
-    private boolean shouldRequestPermissions(Activity activity) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return false;
+    private boolean shouldRequestPermissions() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return false;
+        }
 
-        int corseLocation = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION);
-        int fineLocation = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION);
+        int corseLocation = ActivityCompat.checkSelfPermission(getReactApplicationContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION);
+        int fineLocation = ActivityCompat.checkSelfPermission(getReactApplicationContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION);
 
-        return corseLocation == PackageManager.PERMISSION_DENIED && fineLocation == PackageManager.PERMISSION_DENIED;
+        return corseLocation == PackageManager.PERMISSION_DENIED
+                && fineLocation == PackageManager.PERMISSION_DENIED;
     }
 
     @ReactMethod
@@ -164,7 +163,8 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
     }
 
     private DefaultNotificationFactory getDefaultNotificationFactory() {
-        final NotificationFactory notifFactory = UAirship.shared().getPushManager().getNotificationFactory();
+        final NotificationFactory notifFactory = UAirship.shared().getPushManager()
+                .getNotificationFactory();
         if (notifFactory instanceof DefaultNotificationFactory) {
             return (DefaultNotificationFactory) notifFactory;
         }
