@@ -1,11 +1,11 @@
 {
   "name": "react-native-ua",
-  "version": "0.0.8",
+  "version": "0.0.9-alpha.1",
   "description": "React Native module for Urban Airship platforms: iOS and Android",
   "main": "index.js",
   "homepage": "https://github.com/globocom/react-native-ua#readme",
   "author": "Globo.com",
-  "contributors":[
+  "contributors": [
     {
       "name": "Evandro Eisinger",
       "email": "evandroeisinger@gmail.com"
@@ -22,9 +22,8 @@
       "name": "Arthur Zettler",
       "email": "arthur.zettler@gmail.com"
     }
-    ],
-  "dependencies": {
-  },
+  ],
+  "dependencies": {},
   "engines": {
     "npm": "^2.0.0"
   },
