@@ -14,17 +14,18 @@ public class ReactNativeUAAutoPilot extends Autopilot {
 
     @Override
     public void onAirshipReady(UAirship airship) {
-		UAirship.shared().getActionRegistry().unregisterAction(OpenExternalUrlAction.DEFAULT_REGISTRY_NAME);
+		UAirship.shared().getActionRegistry()
+                .unregisterAction(OpenExternalUrlAction.DEFAULT_REGISTRY_NAME);
 
         Log.w(TAG, "Airship ready!");
 
         // Customize icons
         DefaultNotificationFactory defaultNotifFactory = getDefaultNotificationFactory();
-        int smallIconResourceId = Preferences.getInstance().getAndroidSmallIconResourceId();
+        int smallIconResourceId = PreferencesManager.getInstance().getAndroidSmallIconResourceId();
         if (smallIconResourceId != 0) {
             defaultNotifFactory.setSmallIconId(smallIconResourceId);
         }
-        int largeIconResourceId = Preferences.getInstance().getAndroidLargeIconResourceId();
+        int largeIconResourceId = PreferencesManager.getInstance().getAndroidLargeIconResourceId();
         if (largeIconResourceId != 0) {
             defaultNotifFactory.setLargeIcon(largeIconResourceId);
         }
@@ -32,7 +33,8 @@ public class ReactNativeUAAutoPilot extends Autopilot {
     }
 
     private DefaultNotificationFactory getDefaultNotificationFactory() {
-        final NotificationFactory notifFactory = UAirship.shared().getPushManager().getNotificationFactory();
+        final NotificationFactory notifFactory = UAirship.shared().getPushManager()
+                .getNotificationFactory();
         if (notifFactory instanceof DefaultNotificationFactory) {
             return (DefaultNotificationFactory) notifFactory;
         }
