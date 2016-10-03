@@ -39,7 +39,7 @@ This plugin provides client-side integration for the [Urban Airship Engage Platf
 
 ### iOS
 
-- Xcode 7.0 or higher
+- Xcode 8.0 or higher
 - Node 4.4
 - React Native Command Line Tools
 - Certificate from a Certificate Authority (CA)
@@ -183,6 +183,14 @@ npm install react-native-ua --save
 
   - NSLocationAlwaysUsageDescription: Urban Airship location service
   - NSLocationWhenInUseUsageDescription: Urban Airship location service when app is in use
+
+10. To enable alert when receive Push Notification in foreground implement the userNotificationCenter:willPresentNotification:withCompletionHandler method on AppDelegate class:
+
+```objective-c
+- (void) userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
+  completionHandler(UNNotificationPresentationOptionAlert);
+}
+```   
 
 ## Methods
 - **[ReactNativeUA.enable_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L63)**: Prompt user to enable notification receivement;

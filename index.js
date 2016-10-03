@@ -32,13 +32,15 @@ switch (Platform.OS) {
         NativeAppEventEmitter.addListener('receivedNotification', (notification) => {
             var action_url = notification.data['^u'] || false;
 
-            call_notification_listeners({
-                'platform': 'ios',
-                'event': notification.event,
-                'alert': notification.data.aps.alert,
-                'data': notification.data,
-                'url': action_url
-            });
+            if (notification && notification.data && notification.data.aps && notification.data.aps.alert) {
+              call_notification_listeners({
+                  'platform': 'ios',
+                  'event': notification.event,
+                  'alert': notification.data.aps.alert,
+                  'data': notification.data,
+                  'url': action_url
+              });
+            }
         });
 
         break;

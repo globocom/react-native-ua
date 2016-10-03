@@ -31,23 +31,25 @@
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <CoreTelephony/CTCarrier.h>
-#import <PassKit/PassKit.h>
 #import <CoreData/CoreData.h>
 #import <CoreLocation/CoreLocation.h>
 #import <Security/Security.h>
 #import <QuartzCore/QuartzCore.h>
 #import <Availability.h>
+#import <UserNotifications/UserNotifications.h>
 
 @class UAConfig;
 @class UAAnalytics;
-@class UALocationService;
 @class UAApplicationMetrics;
 @class UAPush;
 @class UAUser;
+@class UANamedUser;
 @class UAInbox;
 @class UAActionRegistry;
 @class UAInAppMessaging;
 @class UADefaultMessageCenter;
+@class UALocation;
+@class UAAutomation;
 
 
 UA_VERSION_INTERFACE(UAirshipVersion)
@@ -92,8 +94,7 @@ extern NSString * const UAirshipTakeOffBackgroundThreadException;
 
 /**
  * This flag is set to `YES` if the application is set up 
- * with the "remote-notification" background mode and is running
- * iOS7 or greater.
+ * with the "remote-notification" background mode
  */
 @property (nonatomic, assign, readonly) BOOL remoteNotificationBackgroundModeEnabled;
 
@@ -110,12 +111,6 @@ extern NSString * const UAirshipTakeOffBackgroundThreadException;
  */
 @property (nonatomic, strong, readonly) UAWhitelist *whitelist;
 
-
-///---------------------------------------------------------------------------------------
-/// @name Location Services
-///---------------------------------------------------------------------------------------
-
-@property (nonatomic, strong, readonly) UALocationService *locationService;
 
 ///---------------------------------------------------------------------------------------
 /// @name Logging
@@ -219,10 +214,27 @@ extern NSString * const UAirshipTakeOffBackgroundThreadException;
 + (null_unspecified UADefaultMessageCenter *)defaultMessageCenter;
 
 /**
+ * Returns the `UANamedUser` instance.
+ */
++ (null_unspecified UANamedUser *)namedUser;
+
+/**
  * Returns the AirshipResources bundle, or nil if the the bundle
  * cannot be located at runtime.
  */
 + (nullable NSBundle *) resources;
+
+
+/**
+ * Returns the `UALocation` instance.
+ */
++ (null_unspecified UALocation *)location;
+
+
+/**
+ * Returns the `UAAutomation` instance.
+ */
++ (null_unspecified UAAutomation *)automation;
 
 NS_ASSUME_NONNULL_END
 

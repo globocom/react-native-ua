@@ -24,10 +24,49 @@
  */
 
 #import "UAGlobal.h"
+#import "UAirship.h"
 #import "UANamedUser.h"
 #import "UAChannelRegistrar.h"
+#import "UANotificationContent.h"
+#import "UANotificationResponse.h"
+
+@class UANotificationCategory;
 
 NS_ASSUME_NONNULL_BEGIN
+
+/**
+ * NSNotification event when the channel is created. The event
+ * will contain the channel ID under `UAChannelCreatedEventChannelKey`
+ * and a flag under `UAChannelCreatedEventExistingKey` indicating if the
+ * the channel was restored or a new channel was created.
+ */
+extern NSString *const UAChannelCreatedEvent;
+
+/**
+ * Channel ID key for the channel created event.
+ */
+extern NSString *const UAChannelCreatedEventChannelKey;
+
+/**
+ * Channel existing key for the channel created event.
+ */
+extern NSString *const UAChannelCreatedEventExistingKey;
+
+/**
+ * Notification options
+ */
+typedef NS_OPTIONS(NSUInteger, UANotificationOptions) {
+    UANotificationOptionBadge   = (1 << 0),
+    UANotificationOptionSound   = (1 << 1),
+    UANotificationOptionAlert   = (1 << 2),
+    UANotificationOptionCarPlay = (1 << 3)
+};
+
+/**
+ * Notification option for notification type `none`.
+ * Not included in UANotificationOptions enum to maintain parity with UNAuthorizationOptions.
+ */
+static const UANotificationOptions UANotificationOptionNone =  0;
 
 //---------------------------------------------------------------------------------------
 // UARegistrationDelegate
@@ -79,108 +118,44 @@ NS_ASSUME_NONNULL_BEGIN
 @optional
 
 /**
- * Called when an alert notification is received in the foreground.
- * @param alertMessage a simple string to be displayed as an alert
- */
-- (void)displayNotificationAlert:(NSString *)alertMessage;
-
-/**
- * Called when an alert notification is received in the foreground with additional localization info.
- * @param alertDict a dictionary containing the alert and localization info
- */
-- (void)displayLocalizedNotificationAlert:(NSDictionary *)alertDict;
-
-/**
- * Called when a push notification is received in the foreground with a sound associated
- * @param soundFilename The sound file to play or `default` for the standard notification sound.
- *        This file must be included in the application bundle.
- */
-- (void)playNotificationSound:(NSString *)soundFilename;
-
-/**
- * Called when a push notification is received in the foreground with a badge number.
- * @param badgeNumber The badge number to display
- */
-- (void)handleBadgeUpdate:(NSInteger)badgeNumber;
-
-/**
- * Called when a push notification is received while the app is running in the foreground.
- * Overridden by receivedForegroundNotification:fetchCompletionHandler.
+ * Called when a notification is received in the foreground.
  *
- * @param notification The notification dictionary.
+ * @param notificationContent UANotificationContent object representing the notification info.
+ *
+ * @param completionHandler the completion handler to execute when notification processing is complete.
  */
-- (void)receivedForegroundNotification:(NSDictionary *)notification;
+-(void)receivedForegroundNotification:(UANotificationContent *)notificationContent completionHandler:(void (^)())completionHandler;
 
 /**
- * Called when a push notification is received while the app is running in the foreground 
- * for applications with the "remote-notification" background mode.
+ * Called when a notification is received in the background.
  *
- * @param notification The notification dictionary.
- * @param completionHandler Should be called with a UIBackgroundFetchResult as soon as possible, so the system can accurately estimate its power and data cost.
+ * @param notificationContent UANotificationContent object representing the notification info.
+ *
+ * @param completionHandler the completion handler to execute when notification processing is complete.
  */
-- (void)receivedForegroundNotification:(NSDictionary *)notification
-                fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler;
+-(void)receivedBackgroundNotification:(UANotificationContent *)notificationContent completionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
 
 /**
- * Called when a push notification is received while the app is running in the background
- * for applications with the "remote-notification" background mode.  
- * Overridden by receivedBackgroundNotification:fetchCompletionHandler.
+ * Called when a notification is received in the background or foreground and results in a user interaction.
+ * User interactions can include launching the application from the push, or using an interactive control on the notification interface
+ * such as a button or text field.
  *
- * @param notification The notification dictionary.
+ * @param notificationResponse UANotificationResponse object representing the user's response
+ * to the notification and the associated notification contents.
+ *
+ * @param completionHandler the completion handler to execute when processing the user's response has completed.
  */
-- (void)receivedBackgroundNotification:(NSDictionary *)notification;
+-(void)receivedNotificationResponse:(UANotificationResponse *)notificationResponse completionHandler:(void (^)())completionHandler;
 
 /**
- * Called when a push notification is received while the app is running in the background
- * for applications with the "remote-notification" background mode.
+ * Called when a notification has arrived in the foreground and is available for display.
  *
- * @param notification The notification dictionary.
- * @param completionHandler Should be called with a UIBackgroundFetchResult as soon as possible, so the system can accurately estimate its power and data cost.
- */
-- (void)receivedBackgroundNotification:(NSDictionary *)notification
-                fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler;
-
-/**
- * Called when the app is started or resumed because a user opened a notification.
- * Overridden by launchedFromNotification:fetchCompletionHandler.
+ * Note: this method is relevant only for iOS 10 and above.
  *
- * @param notification The notification dictionary.
+ * @param notification The notification.
+ * @return a UNNotificationPresentationOptions enum value indicating the presentation options for the notification.
  */
-- (void)launchedFromNotification:(NSDictionary *)notification;
-
-/**
- * Called when the app is started or resumed because a user opened a notification
- * for applications with the "remote-notification" background mode.
- *
- * @param notification The notification dictionary.
- * @param completionHandler Should be called with a UIBackgroundFetchResult as soon as possible, so the system can accurately estimate its power and data cost.
- */
-- (void)launchedFromNotification:(NSDictionary *)notification
-          fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler;
-
-/**
- * Called when the app is started from a user notification action button with foreground activation mode.
- *
- * @param notification The notification dictionary.
- * @param identifier The user notification action identifier.
- * @param completionHandler Should be called as soon as possible.
- */
-- (void)launchedFromNotification:(NSDictionary *)notification
-                actionIdentifier:(NSString *)identifier
-               completionHandler:(void (^)())completionHandler;
-
-
-/**
- * Called when the app is started from a user notification action button with background activation mode.
- *
- * @param notification The notification dictionary.
- * @param identifier The user notification action identifier.
- * @param completionHandler Should be called as soon as possible.
- */
-- (void)receivedBackgroundNotification:(NSDictionary *)notification
-                      actionIdentifier:(NSString *)identifier
-                     completionHandler:(void (^)())completionHandler;
-
+- (UNNotificationPresentationOptions)presentationOptionsForNotification:(UNNotification *)notification;
 
 @end
 
@@ -194,6 +169,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 #pragma clang diagnostic push
 @interface UAPush : NSObject
+
 
 ///---------------------------------------------------------------------------------------
 /// @name Push Notifications
@@ -284,28 +260,34 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, readonly, nullable) NSString *channelID;
 
 /**
- * User Notification types this app will request from APNS. Changes to this value
+ * User Notification options this app will request from APNS. Changes to this value
  * will not take effect the next time the app registers with
  * updateRegistration.
  *
  * Defaults to alert, sound and badge.
  */
-@property (nonatomic, assign) UIUserNotificationType userNotificationTypes;
+@property (nonatomic, assign) UANotificationOptions notificationOptions;
 
 /**
- * Custom user notification categories. Urban Airship default user notification
+ * Custom notification categories. Urban Airship default notification
  * categories will be unaffected by this field.
  *
- * Changes to this value will not take effect the next time the app registers
+ * Changes to this value will not take effect until the next time the app registers
  * with updateRegistration.
  */
-@property (nonatomic, strong) NSSet *userNotificationCategories;
+@property (nonatomic, strong) NSSet<UANotificationCategory *> *customCategories;
+
+/**
+ * The combined set of notification categories from `customCategories` set by the app
+ * and the Urban Airship provided categories.
+ */
+@property (nonatomic, readonly) NSSet<UANotificationCategory *> *combinedCategories;
 
 /**
  * Sets authorization required for the default Urban Airship categories. Only applies
  * to background user notification actions.
  *
- * Changes to this value will not take effect the next time the app registers
+ * Changes to this value will not take effect until the next time the app registers
  * with updateRegistration.
  */
 @property (nonatomic, assign) BOOL requireAuthorizationForDefaultCategories;
@@ -321,10 +303,21 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak, nullable) id<UARegistrationDelegate> registrationDelegate;
 
 /**
- * Notification that launched the application
+ * Notification response that launched the application.
  */
-@property (nonatomic, readonly, strong, nullable) NSDictionary *launchNotification;
+@property (nonatomic, readonly, strong, nullable) UANotificationResponse *launchNotificationResponse;
 
+/**
+ * The current authorized notification options.
+ */
+@property (nonatomic, assign, readonly) UANotificationOptions authorizedNotificationOptions;
+
+/**
+ * The default presentation options to use for foreground notifications.
+ *
+ * Note: this property is relevant only for iOS 10 and above.
+ */
+@property (nonatomic, assign) UNNotificationPresentationOptions defaultPresentationOptions;
 
 ///---------------------------------------------------------------------------------------
 /// @name Autobadge
@@ -349,11 +342,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)resetBadge;
 
-/**
- * Gets the current enabled notification types.
- * @return The current enabled notification types.
- */
-- (UIUserNotificationType)currentEnabledNotificationTypes;
 
 
 ///---------------------------------------------------------------------------------------
@@ -363,14 +351,6 @@ NS_ASSUME_NONNULL_BEGIN
 /** Alias for this device */
 @property (nonatomic, copy, nullable) NSString *alias;
 
-///---------------------------------------------------------------------------------------
-/// @name Named User
-///---------------------------------------------------------------------------------------
-
-/**
- * Named user for this device.
- */
-@property (nonatomic, strong) UANamedUser *namedUser;
 
 ///---------------------------------------------------------------------------------------
 /// @name Tags
@@ -534,75 +514,6 @@ NS_ASSUME_NONNULL_BEGIN
  * Add a `UARegistrationDelegate` to `UAPush` to receive success and failure callbacks.
  */
 - (void)updateRegistration;
-
-///---------------------------------------------------------------------------------------
-/// @name AppDelegate hooks
-///---------------------------------------------------------------------------------------
-
-/**
- * Handle incoming push notifications. This method will record push conversions, parse the notification
- * and call the appropriate methods on your delegate.
- *
- * @param notification The notification payload, as passed to your application delegate.
- * @param state The application state at the time the notification was received.
- */
-- (void)appReceivedRemoteNotification:(NSDictionary *)notification
-                     applicationState:(UIApplicationState)state;
-
-/**
- * Handle incoming push notifications. This method will record push conversions, parse the notification
- * and call the appropriate methods on your delegate.
- *
- * @param notification The notification payload, as passed to your application delegate.
- * @param state The application state at the time the notification was received.
- * @param completionHandler Should be called with a UIBackgroundFetchResult as soon as possible, so the system can accurately estimate its power and data cost.
- */
-- (void)appReceivedRemoteNotification:(NSDictionary *)notification
-                     applicationState:(UIApplicationState)state
-               fetchCompletionHandler:(nullable void (^)(UIBackgroundFetchResult result))completionHandler;
-
-/**
- * Handle device token registration. Associates the
- * token with the channel and update the channel registration.
- *
- * Add a `UARegistrationDelegate` to `UAPush` to received success and failure callbacks.
- *
- * @param token The device token to register.
- */
-- (void)appRegisteredForRemoteNotificationsWithDeviceToken:(NSData *)token;
-
-/**
- * Handles user notification settings registration.
- */
-- (void)appRegisteredUserNotificationSettings;
-
-/**
- * Handle interactive notification actions.
- *
- * @param identifier The identifier of the button that was triggered.
- * @param notification The notification payload, as passed to your application delegate.
- * @param state The application state at the time the notification was received.
- * @param completionHandler The completion handler.
- */
-- (void)appReceivedActionWithIdentifier:(NSString *)identifier
-                           notification:(NSDictionary *)notification
-                       applicationState:(UIApplicationState)state
-                      completionHandler:(void (^)())completionHandler;
-
-/**
- * Handle interactive notification actions with response info.
- *
- * @param identifier The identifier of the button that was triggered.
- * @param notification The notification payload, as passed to your application delegate.
- * @param responseInfo The response info, as passed to your application delegate.
- * @param state The application state at the time the notification was received.
- * @param completionHandler The completion handler.
- */
-- (void)appReceivedActionWithIdentifier:(NSString *)identifier
-                           notification:(NSDictionary *)notification
-                           responseInfo:(nullable NSDictionary *)responseInfo
-                       applicationState:(UIApplicationState)state
-                      completionHandler:(void (^)())completionHandler;
 
 @end
 

@@ -65,7 +65,13 @@ typedef NS_ENUM(NSInteger, UASituation) {
      * Represents a situation in which the action was triggered from a
      * background interactive notification button.
      */
-    UASituationBackgroundInteractiveButton
+    UASituationBackgroundInteractiveButton,
+
+    /**
+     * Represents a situation in which the action was triggered from an
+     * automation trigger.
+     */
+    UASituationAutomation,
 };
 
 
@@ -104,10 +110,16 @@ NS_ASSUME_NONNULL_BEGIN
 extern NSString * const UAActionMetadataWebViewKey;
 
 /**
- * Metadata key for the push notificaiton. Available when an action is triggered
+ * Metadata key for the push notification. Available when an action is triggered
  * from a push notification or user notification action.
  */
 extern NSString * const UAActionMetadataPushPayloadKey;
+
+/**
+ * Metadata key for the push notification. Available when an action is triggered
+ * from a push notification that was presented in the foreground with alert options.
+ */
+extern NSString * const UAActionMetadataForegroundPresentationKey;
 
 /**
  * Metadata key for the inbox message. Available when an action is triggered from
