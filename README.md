@@ -184,14 +184,6 @@ npm install react-native-ua --save
   - NSLocationAlwaysUsageDescription: Urban Airship location service
   - NSLocationWhenInUseUsageDescription: Urban Airship location service when app is in use
 
-10. To enable alert when receive Push Notification in foreground implement the userNotificationCenter:willPresentNotification:withCompletionHandler method on AppDelegate class:
-
-```objective-c
-- (void) userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
-  completionHandler(UNNotificationPresentationOptionAlert);
-}
-```   
-
 ## Methods
 - **[ReactNativeUA.enable_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L63)**: Prompt user to enable notification receivement;
 - **[ReactNativeUA.disable_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L67)**: Prompt user to disable notification receivement;

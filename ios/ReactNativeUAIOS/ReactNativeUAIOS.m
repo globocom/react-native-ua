@@ -36,7 +36,7 @@ static PushHandler *pushHandler = nil;
 
 - (void)verifyLaunchOptions:(NSDictionary *) launchOptions {
     NSDictionary *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-    
+
     if (notification == nil) [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"push_notification_opened_from_background"];
 }
 
@@ -97,14 +97,14 @@ RCT_EXPORT_METHOD(setNamedUserId:(NSString *)nameUserId) {
 
 RCT_EXPORT_METHOD(handleBackgroundNotification) {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
+
     if ([defaults objectForKey:@"push_notification_opened_from_background"]) {
-        
+
         NSDictionary *notification = [defaults objectForKey:@"push_notification_opened_from_background"];
-        
+
         [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"event": @"launchedFromNotification",
                                                                                      @"data": notification}];
-        
+
         [defaults removeObjectForKey:@"push_notification_opened_from_background"];
     }
 }
@@ -113,36 +113,36 @@ RCT_EXPORT_METHOD(enableGeolocation) {
     if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined){
         static CLLocationManager* lm = nil;
         static dispatch_once_t once;
-        
+
         dispatch_once(&once, ^ {
             // Code to run once
             lm = [[CLLocationManager alloc] init];
         });
-        
+
         [lm requestAlwaysAuthorization];
-        
+
         [UAirship location].locationUpdatesEnabled = YES;
         [UAirship location].autoRequestAuthorizationEnabled = YES;
         [UAirship location].backgroundLocationUpdatesAllowed = YES;
-        
+
     }
 }
 
 RCT_EXPORT_METHOD(enableActionUrl) {
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"enable_action_url"];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    
+
     BOOL isActionUrl = [[NSUserDefaults standardUserDefaults] boolForKey:@"enable_action_url"] ? YES : NO;
-    
+
     NSLog(@"Habilitou o comportamento DEFAULT da action URL -> %@", isActionUrl ? @"YES": @"NO");
 }
 
 RCT_EXPORT_METHOD(disableActionUrl) {
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"enable_action_url"];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    
+
     BOOL isActionUrl = [[NSUserDefaults standardUserDefaults] boolForKey:@"enable_action_url"] ? YES : NO;
-    
+
     NSLog(@"Desabilitou o comportamento DEFAULT da action URL -> %@", isActionUrl ? @"YES": @"NO");
 }
 
@@ -151,14 +151,37 @@ RCT_EXPORT_METHOD(disableActionUrl) {
 
 @implementation PushHandler
 
--(void)receivedBackgroundNotification:(UANotificationContent *)notificationContent completionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    [self handleNotification:notificationContent event:@"receivedBackgroundNotificationActionButton"];
-    completionHandler(UIBackgroundFetchResultNoData);
+- (BOOL)actionHandleNotification:(UANotificationContent *)notificationContent completionHandler:(void (^)())completionHandler {
+    NSDictionary *notification = [notificationContent notificationInfo];
+    BOOL isActionUrl = [[NSUserDefaults standardUserDefaults] boolForKey:@"enable_action_url"] ? YES : NO;
+    BOOL isUrl = [notification objectForKey:@"^u"] ? YES : NO;
+
+    if (isActionUrl == YES && isUrl == YES) {
+        UAActionArguments * arguments = [UAActionArguments argumentsWithValue:[notification objectForKey:@"^u"] withSituation:UASituationManualInvocation];
+
+        UAOpenExternalURLAction *urlAction = [[UAOpenExternalURLAction alloc] init];
+
+        [urlAction performWithArguments:arguments completionHandler:completionHandler];
+
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 -(void)receivedForegroundNotification:(UANotificationContent *)notificationContent completionHandler:(void (^)())completionHandler {
-    [self handleNotification:notificationContent event:@"receivedForegroundNotification"];
-    completionHandler();
+    if (![self actionHandleNotification:notificationContent completionHandler:completionHandler]) {
+        [self handleNotification:notificationContent event:@"receivedForegroundNotification"];
+        completionHandler();
+    }
+}
+
+-(void)receivedBackgroundNotification:(UANotificationContent *)notificationContent completionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+
+    if (![self actionHandleNotification:notificationContent completionHandler:completionHandler]) {
+        [self handleNotification:notificationContent event:@"receivedBackgroundNotificationActionButton"];
+        completionHandler(UIBackgroundFetchResultNoData);
+    }
 }
 
 -(void)receivedNotificationResponse:(UANotificationResponse *)notificationResponse completionHandler:(void (^)())completionHandler {
@@ -227,6 +250,10 @@ RCT_EXPORT_METHOD(disableActionUrl) {
     }
 
     return notificationAction;
+}
+
+-(UNNotificationPresentationOptions) presentationOptionsForNotification:(UNNotification *)notification {
+    return UNNotificationPresentationOptionAlert;
 }
 
 
