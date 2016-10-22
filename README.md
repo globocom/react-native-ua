@@ -105,13 +105,11 @@ npm install react-native-ua --save
   public class MainApplication extends Application implements ReactApplication {
       // ...
 
-      public final Application application = this; // get application
-
       @Override
       protected List<ReactPackage> getPackages() {
           return Arrays.<ReactPackage>asList(
               // ...
-              new ReactNativeUAPackage(application) // set react-native-ua package using application
+              new ReactNativeUAPackage() // set react-native-ua package using application
           );
       }
   }
