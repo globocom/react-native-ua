@@ -56,7 +56,7 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void setNamedUserId(String namedUserID) {
-        UAirship.shared().getPushManager().getNamedUser().setId(namedUserID);
+        UAirship.shared().getNamedUser().setId(namedUserID);
     }
 
     @ReactMethod
