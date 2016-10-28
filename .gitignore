@@ -6,3 +6,6 @@ npm-debug.log
 
 *.swp
 ios/AirshipConfig.plist
+
+android/.gradle
+local.properties
