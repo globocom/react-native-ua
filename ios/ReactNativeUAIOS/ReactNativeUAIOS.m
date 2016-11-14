@@ -151,7 +151,7 @@ RCT_EXPORT_METHOD(setQuietTime:(NSDictionary *)time) {
     [[UAirship push] updateRegistration];
 }
 
-RCT_EXPORT_METHOD(setQuietTimeEnabled:(NSNumber *)enabled) {
+RCT_EXPORT_METHOD(setQuietTimeEnabled:(nonnull NSNumber *)enabled) {
     [[UAirship push] setQuietTimeEnabled:[enabled boolValue]];
     [[UAirship push] updateRegistration];
 }
