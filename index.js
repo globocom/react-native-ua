@@ -115,6 +115,15 @@ class ReactNativeUA {
       bridge.setQuietTimeEnabled(enabled);
     }
 
+    static are_notifications_enabled (callback) {
+        return new Promise((resolve, reject) => {
+            bridge.areNotificationsEnabled(enabled => {
+                callback && callback(null, enabled);
+                resolve(enabled);
+            })
+        })
+    }
+
     static set_named_user_id (nameUserId) {
         bridge.setNamedUserId(nameUserId);
     }

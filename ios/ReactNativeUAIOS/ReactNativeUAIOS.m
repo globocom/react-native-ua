@@ -156,6 +156,13 @@ RCT_EXPORT_METHOD(setQuietTimeEnabled:(nonnull NSNumber *)enabled) {
     [[UAirship push] updateRegistration];
 }
 
+RCT_EXPORT_METHOD(areNotificationsEnabled:(RCTResponseSenderBlock)callback)
+{
+    UIUserNotificationSettings *grantedSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
+    BOOL enabled = grantedSettings.types != UIUserNotificationTypeNone;
+    callback(@[ @(enabled) ]);
+}
+
 @end
 
 
