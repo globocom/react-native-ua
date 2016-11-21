@@ -106,6 +106,7 @@ RCT_EXPORT_METHOD(handleBackgroundNotification) {
                                                                                      @"data": notification}];
 
         [defaults removeObjectForKey:@"push_notification_opened_from_background"];
+        [defaults synchronize];
     }
 }
 
@@ -144,6 +145,23 @@ RCT_EXPORT_METHOD(disableActionUrl) {
     BOOL isActionUrl = [[NSUserDefaults standardUserDefaults] boolForKey:@"enable_action_url"] ? YES : NO;
 
     NSLog(@"Desabilitou o comportamento DEFAULT da action URL -> %@", isActionUrl ? @"YES": @"NO");
+}
+
+RCT_EXPORT_METHOD(setQuietTime:(NSDictionary *)time) {
+    [[UAirship push] setQuietTimeStartHour:[time[@"startHour"] unsignedIntegerValue] startMinute:[time[@"startMinute"] unsignedIntegerValue] endHour:[time[@"endHour"] unsignedIntegerValue] endMinute:[time[@"endMinute"] unsignedIntegerValue]];
+    [[UAirship push] updateRegistration];
+}
+
+RCT_EXPORT_METHOD(setQuietTimeEnabled:(nonnull NSNumber *)enabled) {
+    [[UAirship push] setQuietTimeEnabled:[enabled boolValue]];
+    [[UAirship push] updateRegistration];
+}
+
+RCT_EXPORT_METHOD(areNotificationsEnabled:(RCTResponseSenderBlock)callback)
+{
+    UIUserNotificationSettings *grantedSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
+    BOOL enabled = grantedSettings.types != UIUserNotificationTypeNone;
+    callback(@[ @(enabled) ]);
 }
 
 @end
