@@ -106,6 +106,7 @@ RCT_EXPORT_METHOD(handleBackgroundNotification) {
                                                                                      @"data": notification}];
 
         [defaults removeObjectForKey:@"push_notification_opened_from_background"];
+        [defaults synchronize];
     }
 }
 
