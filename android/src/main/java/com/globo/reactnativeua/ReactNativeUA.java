@@ -15,6 +15,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.Callback;
 import com.urbanairship.Autopilot;
 import com.urbanairship.UAirship;
 import com.urbanairship.push.notifications.DefaultNotificationFactory;
@@ -55,21 +56,27 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void setQuietTime(ReadableMap time) {
-      try {
-        SimpleDateFormat formatter = new SimpleDateFormat("hh:mm", Locale.getDefault());
-        Date startDate = formatter.parse(time.getInt("startHour") + ":" + time.getInt("startMinute"));
-        Date endDate = formatter.parse(time.getInt("endHour") + ":" + time.getInt("endMinute"));
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("hh:mm", Locale.getDefault());
+            Date startDate = formatter.parse(time.getInt("startHour") + ":" + time.getInt("startMinute"));
+            Date endDate = formatter.parse(time.getInt("endHour") + ":" + time.getInt("endMinute"));
 
-        UAirship.shared().getPushManager().setQuietTimeInterval(startDate, endDate);
+            UAirship.shared().getPushManager().setQuietTimeInterval(startDate, endDate);
 
-        } catch (ParseException ex) {
-          ex.printStackTrace();
-        }
+          } catch (ParseException ex) {
+              Log.e("ReactNativeUA.setQuietTime", "Date format exception", ex);
+          }
     }
 
     @ReactMethod
     public void setQuietTimeEnabled(Boolean enabled) {
-      UAirship.shared().getPushManager().setQuietTimeEnabled(enabled);
+        UAirship.shared().getPushManager().setQuietTimeEnabled(enabled);
+    }
+
+    @ReactMethod
+    public void areNotificationsEnabled(Callback callback) {
+        Boolean enabled = Airship.shared().getPushManager().isOptIn();
+        callback.invoke(enabled);
     }
 
     @ReactMethod

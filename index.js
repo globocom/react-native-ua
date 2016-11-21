@@ -108,21 +108,16 @@ class ReactNativeUA {
     * @param {number} time.endMinute
     */
     static set_quiet_time (time) {
-      bridge.setQuietTime(time);
+        bridge.setQuietTime(time);
     }
 
     static set_quiet_time_enabled (enabled) {
-      bridge.setQuietTimeEnabled(enabled);
+        bridge.setQuietTimeEnabled(enabled);
     }
 
     static are_notifications_enabled (callback) {
         return new Promise((resolve, reject) => {
             bridge.areNotificationsEnabled(enabled => {
-                if (Platform.OS == 'android') {
-                    let error = new Error('are_notifications_enabled is iOS only.')
-                    callback && callback(error);
-                    return reject(error);
-                }
                 callback && callback(null, enabled);
                 resolve(enabled);
             })
