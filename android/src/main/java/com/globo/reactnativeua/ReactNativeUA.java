@@ -2,8 +2,8 @@ package com.globo.reactnativeua;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import java.util.Date;
@@ -17,12 +17,6 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.urbanairship.Autopilot;
 import com.urbanairship.UAirship;
-import com.urbanairship.actions.Action;
-import com.urbanairship.actions.ActionArguments;
-import com.urbanairship.actions.ActionCompletionCallback;
-import com.urbanairship.actions.ActionResult;
-import com.urbanairship.actions.ActionRunRequest;
-import com.urbanairship.actions.ActionValue;
 import com.urbanairship.push.notifications.DefaultNotificationFactory;
 import com.urbanairship.push.notifications.NotificationFactory;
 
@@ -80,7 +74,7 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void setNamedUserId(String namedUserID) {
-        UAirship.shared().getPushManager().getNamedUser().setId(namedUserID);
+        UAirship.shared().getNamedUser().setId(namedUserID);
     }
 
     @ReactMethod
@@ -123,28 +117,14 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
     @ReactMethod
     public void enableGeolocation() {
         if (shouldRequestPermissions()) {
-            ActionRunRequest.createRequest(new Action() {
-                @NonNull
+            RequestPermissionsTask task = new RequestPermissionsTask(getReactApplicationContext(), new RequestPermissionsTask.Callback() {
                 @Override
-                public ActionResult perform(ActionArguments arguments) {
-                    int[] result = requestPermissions(Manifest.permission.ACCESS_COARSE_LOCATION,
-                            Manifest.permission.ACCESS_FINE_LOCATION);
-                    for (int i = 0; i < result.length; i++) {
-                        if (result[i] == PackageManager.PERMISSION_GRANTED) {
-                            return ActionResult.newResult(ActionValue.wrap(true));
-                        }
-                    }
-                    return ActionResult.newResult(ActionValue.wrap(false));
-                }
-            }).run(new ActionCompletionCallback() {
-                @Override
-                public void onFinish(ActionArguments arguments, ActionResult result) {
-                    if (result.getValue().getBoolean(false)) {
-                        UAirship.shared().getLocationManager().setLocationUpdatesEnabled(true);
-                    }
+                public void onResult(boolean enabled) {
+                    UAirship.shared().getLocationManager().setLocationUpdatesEnabled(enabled);
                 }
             });
 
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
         } else {
             UAirship.shared().getLocationManager().setLocationUpdatesEnabled(true);
         }
@@ -155,12 +135,12 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
             return false;
         }
 
-        int corseLocation = ActivityCompat.checkSelfPermission(getReactApplicationContext(),
+        int coarseLocation = ActivityCompat.checkSelfPermission(getReactApplicationContext(),
                 Manifest.permission.ACCESS_COARSE_LOCATION);
         int fineLocation = ActivityCompat.checkSelfPermission(getReactApplicationContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION);
 
-        return corseLocation == PackageManager.PERMISSION_DENIED
+        return coarseLocation == PackageManager.PERMISSION_DENIED
                 && fineLocation == PackageManager.PERMISSION_DENIED;
     }
 
