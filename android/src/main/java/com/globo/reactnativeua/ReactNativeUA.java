@@ -15,6 +15,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.Callback;
 import com.urbanairship.Autopilot;
 import com.urbanairship.UAirship;
 import com.urbanairship.actions.Action;
@@ -77,6 +78,12 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
     public void setQuietTimeEnabled(Boolean enabled) {
       UAirship.shared().getPushManager().setQuietTimeEnabled(enabled);
     }
+
+/*    @ReactMethod
+    public void areNotificationsEnabled(Callback callback) {
+        Boolean enabled = NotificationManagerCompat.areNotificationsEnabled();
+        callback.invoke(enabled);
+    }*/
 
     @ReactMethod
     public void setNamedUserId(String namedUserID) {
