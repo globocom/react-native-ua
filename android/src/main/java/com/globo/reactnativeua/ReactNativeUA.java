@@ -63,9 +63,9 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
 
             UAirship.shared().getPushManager().setQuietTimeInterval(startDate, endDate);
 
-          } catch (ParseException ex) {
-              Log.e("ReactNativeUA.setQuietTime", "Date format exception", ex);
-          }
+        } catch (ParseException ex) {
+            Log.e("ReactNativeUA.setQuietTime", "Date format exception", ex);
+        }
     }
 
     @ReactMethod
