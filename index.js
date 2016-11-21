@@ -118,6 +118,11 @@ class ReactNativeUA {
     static are_notifications_enabled (callback) {
         return new Promise((resolve, reject) => {
             bridge.areNotificationsEnabled(enabled => {
+                if (Platform.OS == 'android') {
+                    let error = new Error('are_notifications_enabled is iOS only.')
+                    callback && callback(error);
+                    return reject(error);
+                }
                 callback && callback(null, enabled);
                 resolve(enabled);
             })
