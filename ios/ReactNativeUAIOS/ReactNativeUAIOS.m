@@ -146,6 +146,21 @@ RCT_EXPORT_METHOD(disableActionUrl) {
     NSLog(@"Desabilitou o comportamento DEFAULT da action URL -> %@", isActionUrl ? @"YES": @"NO");
 }
 
+RCT_EXPORT_METHOD(setQuietTime:(NSDictionary *)time) {
+    [[UAirship push] setQuietTimeStartHour:[time[@"startHour"] unsignedIntegerValue] startMinute:[time[@"startMinute"] unsignedIntegerValue] endHour:[time[@"endHour"] unsignedIntegerValue] endMinute:[time[@"endMinute"] unsignedIntegerValue]];
+    [[UAirship push] updateRegistration];
+}
+
+RCT_EXPORT_METHOD(setQuietTimeEnabled:(nonnull NSNumber *)enabled) {
+    [[UAirship push] setQuietTimeEnabled:[enabled boolValue]];
+    [[UAirship push] updateRegistration];
+}
+
+RCT_EXPORT_METHOD(areNotificationsEnabled:(RCTResponseSenderBlock)callback) {
+    BOOL enabled = [UAirship push].authorizedNotificationOptions != 0;
+    callback(@[ @(enabled) ]);
+}
+
 @end
 
 

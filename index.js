@@ -100,6 +100,30 @@ class ReactNativeUA {
         bridge.removeTag(tag);
     }
 
+    /*
+    * @param {Object} time
+    * @param {number} time.startHour
+    * @param {number} time.startMinute
+    * @param {number} time.endHour
+    * @param {number} time.endMinute
+    */
+    static set_quiet_time (time) {
+        bridge.setQuietTime(time);
+    }
+
+    static set_quiet_time_enabled (enabled) {
+        bridge.setQuietTimeEnabled(enabled);
+    }
+
+    static are_notifications_enabled (callback) {
+        return new Promise((resolve, reject) => {
+            bridge.areNotificationsEnabled(enabled => {
+                callback && callback(null, enabled);
+                resolve(enabled);
+            })
+        })
+    }
+
     static set_named_user_id (nameUserId) {
         bridge.setNamedUserId(nameUserId);
     }
