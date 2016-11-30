@@ -2,10 +2,6 @@
 
 This plugin provides client-side integration for the [Urban Airship Engage Platform](https://www.urbanairship.com/products/engage) in _iOS_ and _Android_ app environment.
 
-
-[Sample app using this module](https://github.com/globocom/react-native-ua-sample)
-
-
 <!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
 - [Supported React Native platforms](#supported-react-native-platforms)
