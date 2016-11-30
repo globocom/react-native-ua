@@ -183,16 +183,24 @@ npm install react-native-ua --save
   - NSLocationWhenInUseUsageDescription: Urban Airship location service when app is in use
 
 ## Methods
-- **[ReactNativeUA.enable_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L63)**: Prompt user to enable notification receivement;
-- **[ReactNativeUA.disable_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L67)**: Prompt user to disable notification receivement;
-- **[ReactNativeUA.enable_geolocation()](https://github.com/globocom/react-native-ua/blob/master/index.js#L71)**: Prompt user to enable geolocation;
-- **[ReactNativeUA.enable_action_url()](https://github.com/globocom/react-native-ua/blob/master/index.js#L75)**: Enable url action. The app will open the default browser with passed url;
-- **[ReactNativeUA.disable_action_url()](https://github.com/globocom/react-native-ua/blob/master/index.js#L79)**: Disable url action (Default). The notification handler will receive payload with a `url` property;
-- **[ReactNativeUA.handle_background_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L83)**: Handle notifications when app is in background;
-- **[ReactNativeUA.add_tag("tag")](https://github.com/globocom/react-native-ua/blob/master/index.js#L87)**: Set tag to the user;
-- **[ReactNativeUA.remove_tag("tag")](https://github.com/globocom/react-native-ua/blob/master/index.js#L91)**: Remove added tag;
-- **[ReactNativeUA.set_named_user_id("nameUserId")](https://github.com/globocom/react-native-ua/blob/master/index.js#L95)**: Set named user id;
-- **[ReactNativeUA.on_notification((notification) => {})](https://github.com/globocom/react-native-ua/blob/master/index.js#L99)**: Add handler to handle all incoming notifications. **Attention:** this method need to be called on `componentWillMount()` of the component lifecycle.
+- **[ReactNativeUA.enable_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L71)**: Prompt user to enable notification receivement;
+- **[ReactNativeUA.disable_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L75)**: Prompt user to disable notification receivement;
+- **[ReactNativeUA.enable_geolocation()](https://github.com/globocom/react-native-ua/blob/master/index.js#L79)**: Prompt user to enable geolocation;
+- **[ReactNativeUA.enable_action_url()](https://github.com/globocom/react-native-ua/blob/master/index.js#L83)**: Enable url action. The app will open the default browser with passed url;
+- **[ReactNativeUA.disable_action_url()](https://github.com/globocom/react-native-ua/blob/master/index.js#L87)**: Disable url action (Default). The notification handler will receive payload with a `url` property;
+- **[ReactNativeUA.handle_background_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L91)**: Handle notifications when app is in background;
+- **[ReactNativeUA.add_tag("tag")](https://github.com/globocom/react-native-ua/blob/master/index.js#L95)**: Set tag to the user;
+- **[ReactNativeUA.remove_tag("tag")](https://github.com/globocom/react-native-ua/blob/master/index.js#L99)**: Remove added tag;
+- **[ReactNativeUA.set_quiet_time_enabled(true)](https://github.com/globocom/react-native-ua/blob/master/index.js#L114)**: Enable/disable a quiet notification period.
+- **[ReactNativeUA.set_quiet_time({
+  startHour: 22,
+  startMinute: 0,
+  endHour: 7,
+  endMinute: 0
+})](https://github.com/globocom/react-native-ua/blob/master/index.js#L110)**: Set the quiet period.
+- **[ReactNativeUA.are_notifications_enabled((error, enabled) => {})](https://github.com/globocom/react-native-ua/blob/master/index.js#L118)**: Check if notifications are enabled by user. The callback is optional, this method also returns a promise.
+- **[ReactNativeUA.set_named_user_id("nameUserId")](https://github.com/globocom/react-native-ua/blob/master/index.js#L127)**: Set named user id;
+- **[ReactNativeUA.on_notification((notification) => {})](https://github.com/globocom/react-native-ua/blob/master/index.js#L131)**: Add handler to handle all incoming notifications. **Attention:** this method need to be called on `componentWillMount()` of the component lifecycle.
 
 ## Usage
 
@@ -224,6 +232,15 @@ class SampleApp extends Component {
       ReactNativeUA.add_tag('tag'); // set tag to the user
 
       ReactNativeUA.set_named_user_id('user_id'); // set named user id
+
+      ReactNativeUA.set_quiet_time_enabled(true); // activate a quiet period
+
+      ReactNativeUA.set_quiet_time({
+        startHour: 22,
+        startMinute: 0,
+        endHour: 7,
+        endMinute: 0
+      }); // set the period to 22:00-07:00
     }
 
     componentWillMount() {
@@ -238,6 +255,11 @@ class SampleApp extends Component {
 
             alert(notification.alert);
         });
+
+        // Check if user enabled notifications
+        ReactNativeUA.are_notifications_enabled().then(enabled => {
+          console.log('notifications enabled:', enabled);
+        })
     }
 
     render () {
