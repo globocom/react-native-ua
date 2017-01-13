@@ -151,7 +151,7 @@ npm install react-native-ua --save
     node_modules/react-native-ua/ios/Libraries/Airship/AirshipResources.bundle
     ```
 
-8. Inside `AppDelegate.m`, import `ReactNativeUAIOS.h` and call the module with `[ReactNativeUAIOS setupUrbanAirship:launchOptions]`. Follow the example below:
+8. Inside `AppDelegate.m`, import `ReactNativeUAIOS.h` and setup the module. Follow the example below:
 
   ```objective-c
   #import "ReactNativeUAIOS.h"
@@ -162,9 +162,13 @@ npm install react-native-ua --save
 
   - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
   {
-    // setup react native urban airship
+    // setup react native urban airship using AirshipConfig.plist (the default way)
     [ReactNativeUAIOS setupUrbanAirship:launchOptions];
-
+    
+    // OR setup react native urban airship programmatically. The following example use the content of AirshipConfig-dev.plist instead of the default AirshipConfig.plist
+    NSString *configPath = [[NSBundle mainBundle] pathForResource:@"AirshipConfig-dev" ofType:@"plist"];
+    UAConfig *config = [UAConfig configWithContentsOfFile:configPath];
+    [ReactNativeUAIOS setupUrbanAirship:launchOptions withConfig:config];
     // ...
   }
 
