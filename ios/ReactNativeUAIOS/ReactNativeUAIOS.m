@@ -19,8 +19,10 @@ static PushHandler *pushHandler = nil;
 }
 
 + (void)setupUrbanAirship:(NSDictionary *) launchOptions {
-    UAConfig *config = [UAConfig defaultConfig];
+    [self setupUrbanAirship:launchOptions withConfig:[UAConfig defaultConfig]];
+}
 
++ (void)setupUrbanAirship:(NSDictionary *) launchOptions withConfig:(UAConfig *)config {
     [UAirship takeOff:config];
 
     pushHandler = [[PushHandler alloc] init];
