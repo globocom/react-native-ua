@@ -55,6 +55,12 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void getChannelId(Callback callback) {
+	     String channelId = UAirship.shared().getPushManager().getChannelId();
+       callback.invoke(channelId);
+    }
+
+    @ReactMethod
     public void setQuietTime(ReadableMap time) {
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("hh:mm", Locale.getDefault());

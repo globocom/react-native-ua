@@ -68,6 +68,15 @@ switch (Platform.OS) {
 
 class ReactNativeUA {
 
+    static get_channel_id(callback) {
+        return new Promise((resolve, reject) => {
+            bridge.getChannelId(channelId => {
+                callback && callback(null, channelId);
+                resolve(channelId);
+            })
+        })
+    }
+
     static enable_notification () {
         bridge.enableNotification();
     }
