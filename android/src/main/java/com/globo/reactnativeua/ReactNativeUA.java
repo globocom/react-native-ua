@@ -56,8 +56,8 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getChannelId(Callback callback) {
-	     String channelId = UAirship.shared().getPushManager().getChannelId();
-       callback.invoke(channelId);
+        String channelId = UAirship.shared().getPushManager().getChannelId();
+        callback.invoke(channelId);
     }
 
     @ReactMethod

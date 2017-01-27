@@ -68,15 +68,6 @@ switch (Platform.OS) {
 
 class ReactNativeUA {
 
-    static get_channel_id(callback) {
-        return new Promise((resolve, reject) => {
-            bridge.getChannelId(channelId => {
-                callback && callback(null, channelId);
-                resolve(channelId);
-            })
-        })
-    }
-
     static enable_notification () {
         bridge.enableNotification();
     }
@@ -139,6 +130,15 @@ class ReactNativeUA {
 
     static on_notification (callback) {
         notification_listeners.push(callback);
+    }
+
+    static get_channel_id(callback) {
+        return new Promise((resolve, reject) => {
+            bridge.getChannelId(channelId => {
+                callback && callback(null, channelId);
+                resolve(channelId);
+            })
+        })
     }
 
     static set_android_small_icon(iconName) {
