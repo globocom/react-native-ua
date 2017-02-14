@@ -164,7 +164,7 @@ npm install react-native-ua --save
   {
     // setup react native urban airship using AirshipConfig.plist (the default way)
     [ReactNativeUAIOS setupUrbanAirship:launchOptions];
-    
+
     // OR setup react native urban airship programmatically. The following example use the content of AirshipConfig-dev.plist instead of the default AirshipConfig.plist
     NSString *configPath = [[NSBundle mainBundle] pathForResource:@"AirshipConfig-dev" ofType:@"plist"];
     UAConfig *config = [UAConfig configWithContentsOfFile:configPath];
@@ -201,6 +201,7 @@ npm install react-native-ua --save
 - **[ReactNativeUA.are_notifications_enabled((error, enabled) => {})](https://github.com/globocom/react-native-ua/blob/master/index.js#L118)**: Check if notifications are enabled by user. The callback is optional, this method also returns a promise.
 - **[ReactNativeUA.set_named_user_id("nameUserId")](https://github.com/globocom/react-native-ua/blob/master/index.js#L127)**: Set named user id;
 - **[ReactNativeUA.on_notification((notification) => {})](https://github.com/globocom/react-native-ua/blob/master/index.js#L131)**: Add handler to handle all incoming notifications. **Attention:** this method need to be called on `componentWillMount()` of the component lifecycle.
+- **[ReactNativeUA.get_channel_id((error, channelId) => {})](https://github.com/globocom/react-native-ua/blob/master/index.js#L135)**: Get channel id for device. The callback is optional, this method also returns a promise.
 
 ## Usage
 
@@ -259,6 +260,11 @@ class SampleApp extends Component {
         // Check if user enabled notifications
         ReactNativeUA.are_notifications_enabled().then(enabled => {
           console.log('notifications enabled:', enabled);
+        })
+
+        // Get channel id for device
+        ReactNativeUA.get_channel_id().then(channelId => {
+          console.log('channel id:', channelId);
         })
     }
 

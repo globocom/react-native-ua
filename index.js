@@ -132,6 +132,15 @@ class ReactNativeUA {
         notification_listeners.push(callback);
     }
 
+    static get_channel_id(callback) {
+        return new Promise((resolve, reject) => {
+            bridge.getChannelId(channelId => {
+                callback && callback(null, channelId);
+                resolve(channelId);
+            })
+        })
+    }
+
     static set_android_small_icon(iconName) {
         if (Platform.OS === 'android') {
             bridge.setAndroidSmallIcon(iconName);
