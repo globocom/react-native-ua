@@ -1,4 +1,4 @@
-#import "RCTBridgeModule.h"
+#import <React/RCTBridgeModule.h>
 #import "UAPush.h"
 
 @interface ReactNativeUAIOS : NSObject <RCTBridgeModule>
