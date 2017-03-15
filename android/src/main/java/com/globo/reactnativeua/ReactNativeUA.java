@@ -85,6 +85,12 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
         callback.invoke(enabled);
     }
 
+/*    @ReactMethod
+    public void areNotificationsEnabled(Callback callback) {
+        Boolean enabled = NotificationManagerCompat.areNotificationsEnabled();
+        callback.invoke(enabled);
+    }*/
+
     @ReactMethod
     public void setNamedUserId(String namedUserID) {
         UAirship.shared().getNamedUser().setId(namedUserID);
