@@ -29,7 +29,7 @@ This plugin provides client-side integration for the [Urban Airship Engage Platf
 
 - Android Studio 2.0 or higher
 - Node 4.4
-- React Native Commnad Line Tools
+- React Native Command Line Tools
 - [Recommended] Watchman
 - [Recommended] Flow
 
