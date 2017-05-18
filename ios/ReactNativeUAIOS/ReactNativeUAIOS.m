@@ -210,7 +210,7 @@ RCT_EXPORT_METHOD(getChannelId:(RCTResponseSenderBlock)callback) {
 
     NSString *event;
 
-    if ([notificationResponse.actionIdentifier isEqualToString:UANotificationDefaultActionIdentifier]) {
+    if (([notificationResponse.actionIdentifier isEqualToString:UANotificationDefaultActionIdentifier]) || ([notificationResponse.actionIdentifier isEqualToString:@"more_info"])) {
         event = @"launchedFromNotification";
     } else {
         UANotificationAction *notificationAction = [self notificationActionForCategory:notificationResponse.notificationContent.categoryIdentifier
