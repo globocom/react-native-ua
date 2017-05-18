@@ -195,6 +195,34 @@ npm install react-native-ua --save
   - NSLocationAlwaysUsageDescription: Urban Airship location service
   - NSLocationWhenInUseUsageDescription: Urban Airship location service when app is in use
 
+10. If you want to know when the user accepted the notification to do some action, you can implement on your AppDelegate the following code:
+
+```objective-c
+  - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
+{
+  NSDictionary *notification = @{
+                                 @"error" : @NO,
+                                 @"aps": @{
+                                     @"alert": @{}
+                                     }
+                                 }; // aps.alert is necessary
+  [ReactNativeUAIOS dispatchNotificationEvent:@"acceptedNotification" notificationData:notification];
+}
+
+- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
+{
+  NSDictionary *notification = @{
+                                 @"error" : @YES,
+                                 @"aps": @{
+                                     @"alert": @{}
+                                     }
+                                 }; // aps.alert is necessary
+  [ReactNativeUAIOS dispatchNotificationEvent:@"acceptedNotification" notificationData:notification];
+}
+```
+
+This will pass an object { event: "acceptedNotification", data: {...}} to on_notification, so you can know when the user accepted to receive notifications.
+
 ## Methods
 - **[ReactNativeUA.enable_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L71)**: Prompt user to enable notification receivement;
 - **[ReactNativeUA.disable_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L75)**: Prompt user to disable notification receivement;
