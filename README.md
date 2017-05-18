@@ -1,3 +1,16 @@
+-----
+IMPORTANT NOTICE:
+-----
+
+Urban Airship created an official React Native module.
+https://github.com/urbanairship/react-native-module
+
+We recommend you to test their new implementation as this module will probabily be deprecated soon.
+They also made a  guide to help migrate from this module to theirs.
+https://github.com/urbanairship/react-native-module/blob/master/ReactNativeUAMigration.md
+
+------
+
 # React Native Module for Urban Airship
 
 This plugin provides client-side integration for the [Urban Airship Engage Platform](https://www.urbanairship.com/products/engage) in _iOS_ and _Android_ app environment.
