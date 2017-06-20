@@ -100,6 +100,15 @@ class ReactNativeUA {
         bridge.removeTag(tag);
     }
 
+    static get_tags(callback) {
+        return new Promise((resolve, reject) => {
+                bridge.getTags(tags => {
+                callback && callback(null, tags);
+            resolve(tags);
+            })
+        })
+    }
+
     /*
     * @param {Object} time
     * @param {number} time.startHour

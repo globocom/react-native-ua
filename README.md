@@ -204,6 +204,7 @@ npm install react-native-ua --save
 - **[ReactNativeUA.handle_background_notification()](https://github.com/globocom/react-native-ua/blob/master/index.js#L91)**: Handle notifications when app is in background;
 - **[ReactNativeUA.add_tag("tag")](https://github.com/globocom/react-native-ua/blob/master/index.js#L95)**: Set tag to the user;
 - **[ReactNativeUA.remove_tag("tag")](https://github.com/globocom/react-native-ua/blob/master/index.js#L99)**: Remove added tag;
+- **[ReactNativeUA.get_tags()](https://github.com/globocom/react-native-ua/blob/master/index.js#L103)**: Get tags;
 - **[ReactNativeUA.set_quiet_time_enabled(true)](https://github.com/globocom/react-native-ua/blob/master/index.js#L114)**: Enable/disable a quiet notification period.
 - **[ReactNativeUA.set_quiet_time({
   startHour: 22,
@@ -278,6 +279,11 @@ class SampleApp extends Component {
         // Get channel id for device
         ReactNativeUA.get_channel_id().then(channelId => {
           console.log('channel id:', channelId);
+        })
+
+        // Get tags
+        ReactNativeUA.get_tags().then(tags => {
+          console.log(tags);
         })
     }
 

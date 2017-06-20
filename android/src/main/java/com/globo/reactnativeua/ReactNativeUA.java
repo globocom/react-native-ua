@@ -10,12 +10,15 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import java.util.Locale;
+import java.util.Set;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.WritableNativeArray;
+import com.facebook.react.bridge.WritableArray;
 import com.urbanairship.Autopilot;
 import com.urbanairship.UAirship;
 import com.urbanairship.push.notifications.DefaultNotificationFactory;
@@ -52,6 +55,17 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
     @ReactMethod
     public void removeTag(String tag) {
         UAirship.shared().getPushManager().editTags().removeTag(tag).apply();
+    }
+
+    @ReactMethod
+    public void getTags(Callback callback) {
+        Set<String> tags = UAirship.shared().getPushManager().getTags();
+        WritableArray array = new WritableNativeArray();
+        for (String tag: tags)
+        {
+          array.pushString(tag);
+        }
+        callback.invoke(array);
     }
 
     @ReactMethod
