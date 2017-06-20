@@ -93,6 +93,11 @@ RCT_EXPORT_METHOD(removeTag:(NSString *)tag) {
     [[UAirship push] updateRegistration];
 }
 
+RCT_EXPORT_METHOD(removeTag:(NSString *)tag) {
+    [[UAirship push] removeTag:tag];
+    [[UAirship push] updateRegistration];
+}
+
 RCT_EXPORT_METHOD(setNamedUserId:(NSString *)nameUserId) {
     [UAirship namedUser].identifier = nameUserId;
 }
