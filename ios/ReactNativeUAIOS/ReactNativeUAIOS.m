@@ -1,11 +1,11 @@
-#import <React/RCTBridge.h>
+//#import <React/RCTBridge.h>
 #import <React/RCTEventDispatcher.h>
 #import "ReactNativeUAIOS.h"
 #import "AirshipLib.h"
 
 @implementation ReactNativeUAIOS
 
-@synthesize bridge = _bridge;
+RCT_EXPORT_MODULE()
 
 static ReactNativeUAIOS *instance = nil;
 static PushHandler *pushHandler = nil;
@@ -32,7 +32,7 @@ static PushHandler *pushHandler = nil;
     [[UAirship shared].actionRegistry updatePredicate:^BOOL(UAActionArguments *args) {
         return [[NSUserDefaults standardUserDefaults] boolForKey:@"enable_action_url"];
     } forEntryWithName:kUAOpenExternalURLActionDefaultRegistryName];
-
+    
     [[ReactNativeUAIOS getInstance] verifyLaunchOptions:launchOptions];
 }
 
@@ -49,10 +49,18 @@ static PushHandler *pushHandler = nil;
 }
 
 - (void)dispatchEvent:(NSString *)event body:(NSDictionary *)notification {
-    [self.bridge.eventDispatcher sendAppEventWithName:event body:notification];
+    [self sendEventWithName:event body:notification];
 }
 
-RCT_EXPORT_MODULE()
++ (void)dispatchNotificationEvent:(NSString *)eventType notificationData:(NSDictionary *)notificationData {
+    [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"event": eventType,
+                                                                                 @"data": notificationData}];
+}
+
+- (NSArray<NSString *> *)supportedEvents {
+    return @[@"receivedNotification"];
+}
+
 
 RCT_EXPORT_METHOD(enableNotification) {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -104,8 +112,7 @@ RCT_EXPORT_METHOD(handleBackgroundNotification) {
 
         NSDictionary *notification = [defaults objectForKey:@"push_notification_opened_from_background"];
 
-        [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"event": @"launchedFromNotification",
-                                                                                     @"data": notification}];
+        [ReactNativeUAIOS dispatchNotificationEvent:@"launchedFromNotification" notificationData:notification];
 
         [defaults removeObjectForKey:@"push_notification_opened_from_background"];
     }
@@ -223,7 +230,6 @@ RCT_EXPORT_METHOD(getChannelId:(RCTResponseSenderBlock)callback) {
         }
     }
 
-
     [self handleNotification:notificationResponse.notificationContent event:event];
     completionHandler();
 }
@@ -241,8 +247,7 @@ RCT_EXPORT_METHOD(getChannelId:(RCTResponseSenderBlock)callback) {
         [defaults synchronize];
     }
 
-    [[ReactNativeUAIOS getInstance] dispatchEvent:@"receivedNotification" body:@{@"event": event,
-                                                                                 @"data": notificationContent.notificationInfo}];
+    [ReactNativeUAIOS dispatchNotificationEvent:event notificationData:notificationContent.notificationInfo];
 }
 
 - (UANotificationAction *)notificationActionForCategory:(NSString *)category actionIdentifier:(NSString *)identifier {

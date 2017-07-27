@@ -1,12 +1,14 @@
 import {
   DeviceEventEmitter,
   NativeAppEventEmitter,
+  NativeEventEmitter,
   NativeModules,
   Platform
 } from 'react-native';
 
 const ReactNativeUAIOS = NativeModules.ReactNativeUAIOS;
 const ReactNativeUAAndroid = NativeModules.ReactNativeUAAndroid;
+
 
 let bridge = null;
 let notification_listeners = [];
@@ -28,8 +30,8 @@ let call_notification_listeners = function (notification) {
 switch (Platform.OS) {
     case 'ios':
         bridge = ReactNativeUAIOS;
-
-        NativeAppEventEmitter.addListener('receivedNotification', (notification) => {
+        UAEventEmitter = new NativeEventEmitter(ReactNativeUAIOS);
+        UAEventEmitter.addListener('receivedNotification', (notification) => {
             var action_url = notification.data['^u'] || false;
 
             if (notification && notification.data && notification.data.aps && notification.data.aps.alert) {
