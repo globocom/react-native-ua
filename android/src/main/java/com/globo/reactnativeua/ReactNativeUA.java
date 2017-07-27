@@ -192,9 +192,9 @@ public class ReactNativeUA extends ReactContextBaseJavaModule {
         if (imageName == null || imageName.length() <= 0) {
             return -1;
         }
-        int imageId = getImageResourceId(imageName, "drawable");
+        int imageId = getImageResourceId(imageName, "mipmap");
         if (imageId == 0) {
-            imageId = getImageResourceId(imageName, "mipmap");
+            imageId = getImageResourceId(imageName, "drawable");
         }
         return imageId;
     }
