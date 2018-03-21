@@ -136,7 +136,7 @@ RCT_EXPORT_METHOD(enableActionUrl) {
 
     BOOL isActionUrl = [[NSUserDefaults standardUserDefaults] boolForKey:@"enable_action_url"] ? YES : NO;
 
-    NSLog(@"Habilitou o comportamento DEFAULT da action URL -> %@", isActionUrl ? @"YES": @"NO");
+    NSLog(@"Enabled the DEFAULT behavior of the action URL -> %@", isActionUrl ? @"YES": @"NO");
 }
 
 RCT_EXPORT_METHOD(disableActionUrl) {
@@ -145,7 +145,7 @@ RCT_EXPORT_METHOD(disableActionUrl) {
 
     BOOL isActionUrl = [[NSUserDefaults standardUserDefaults] boolForKey:@"enable_action_url"] ? YES : NO;
 
-    NSLog(@"Desabilitou o comportamento DEFAULT da action URL -> %@", isActionUrl ? @"YES": @"NO");
+    NSLog(@"Disabled the DEFAULT behavior of the action URL -> %@", isActionUrl ? @"YES": @"NO");
 }
 
 RCT_EXPORT_METHOD(setQuietTime:(NSDictionary *)time) {
